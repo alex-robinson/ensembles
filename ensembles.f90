@@ -22,19 +22,64 @@ contains
 
 
 
-    subroutine ens_1D(ens_fldr,fldrs,filename,name,time)
+    subroutine ens_1D(ens_fldr,fldrs,filename,name,units,time,tname)
 
         implicit none 
 
         character(len=*), intent(IN) :: ens_fldr, fldrs(:), filename 
-        character(len=*), intent(IN) :: name
+        character(len=*), intent(IN) :: name, units, tname
         double precision, intent(IN) :: time(:) 
 
-        character(len=512) :: filename_out 
+        character(len=512)  :: filename_out
+        character(len=1024) :: path_in, path_out  
+
+        integer :: nfldr, nsim, nt, q 
+
+        double precision, allocatable :: time0(:), var_in(:), var_out(:)
+        integer :: nt0 
 
         ! Define output ensemble filename 
         filename_out = "ens_"//trim(filename)
+        path_out     = trim(ens_fldr)//"/"//trim(filename_out)
 
+        ! Determine number of simulations based on folders 
+        nfldr = size(fldrs) 
+        nsim  = nc_size(path_out,"sim")
+        if (nfldr .ne. nsim) then 
+            write(*,*) "ens_1D:: error: number of folders does not match number of sims in the file."
+            write(*,*) "ensemble file: ",trim(path_out)
+            write(*,*) "nfolders = ",nfldr 
+            write(*,*) "nsims    = ",nsim
+        end if 
+
+        ! Allocate the output variable, set to missing values 
+        nt = size(time) 
+        allocate(var_out(nt))
+        var_out = mv 
+
+        ! Loop over folders and write variable to ensemble file
+        do q = 1, nsim  
+
+            ! Define file for current simulation 
+            path_in = trim(fldrs(q))//"/"//trim(filename)
+
+            ! Get original time length and dimension
+            path_in = trim(fldrs(1))//"/"//trim(filename)
+            nt0 = nc_size(path_in,tname)
+            if (allocated(time0)) deallocate(time0)
+            allocate(time0(nt0),var_in(nt0))
+            call nc_read(path_in,tname,time0)
+
+            ! Read in variable 
+            call nc_read(path_in,name,var_in)
+
+            ! Interpolate to new resolution 
+            var_out = interp_spline(time0,var_in,xout=time) 
+
+            ! Write to ensemble file 
+            call nc_write(path_out,name,var_out,units=units,dim1="sim",dim2=tname, &
+                          start=[q,1],count=[1,nt])
+        end do 
 
         return 
 

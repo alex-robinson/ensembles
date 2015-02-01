@@ -11,12 +11,14 @@ program ens_rembo
     implicit none 
 
     character(len=512) :: ens_fldr, filename 
+    
+    double precision, allocatable :: time_in(:), time_out(:), x(:), y(:), m(:)
+    character(len=256) :: tname, tunits, xname, xunits, yname, yunits, mname, munits
+
     character(len=512), allocatable :: names(:), units(:)
 
-    double precision, allocatable :: time_in(:), time_out(:), x(:), y(:)
-    character(len=256) :: tname, tunits, xname, xunits, yname, yunits
-
-    integer :: nsim, nt, nx, ny  
+    integer :: nsim, nt, nx, ny, nm
+    integer :: nvar  
 
     integer :: k 
 
@@ -35,6 +37,8 @@ program ens_rembo
     yname  = "yc"
     yunits = "km" 
 
+    mname  = "month"
+    munits = "" 
 
     nsim = 5 
 
@@ -56,6 +60,12 @@ program ens_rembo
         y(k) = dble(k)*2.d0
     end do
 
+    nm = 13 
+    allocate(m(nm))
+    do k = 1, nm 
+        m(k) = dble(k)
+    end do
+
     ! 1D ensemble file
     filename = "sico.nc"
     call ens_init(ens_fldr,filename,nsim,t=time_out,tname=tname,tunits=tunits)
@@ -63,6 +73,11 @@ program ens_rembo
     ! 2D ensemble file 
     filename = "sico2D.nc"
     call ens_init(ens_fldr,filename,nsim,x=x,xname=xname,xunits=xunits, &
+                  t=time_out,tname=tname,tunits=tunits)
+
+    ! 2D ensemble file: rembo[month,time]
+    filename = "rembo.nc"
+    call ens_init(ens_fldr,filename,nsim,x=m,xname=mname,xunits=munits, &
                   t=time_out,tname=tname,tunits=tunits)
 
 
