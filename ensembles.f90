@@ -22,13 +22,15 @@ contains
 
 
 
-    subroutine ens_1D(ens_fldr,fldrs,filename,name,units,time,tname)
+    subroutine ens_1D(ens_fldr,fldrs,filename,name,units,time,tname,prec)
 
         implicit none 
 
         character(len=*), intent(IN) :: ens_fldr, fldrs(:), filename 
         character(len=*), intent(IN) :: name, units, tname
         double precision, intent(IN) :: time(:) 
+        character(len=*), intent(IN), optional :: prec 
+        character(len=32) :: precision
 
         character(len=512)  :: filename_out
         character(len=1024) :: path_in, path_out  
@@ -36,11 +38,15 @@ contains
         integer :: nfldr, nsim, nt, q 
 
         double precision, allocatable :: time0(:), var_in(:), var_out(:)
-        integer :: nt0 
+        integer :: nt0, k, k0, k1, l0, l1
 
         ! Define output ensemble filename 
         filename_out = "ens_"//trim(filename)
         path_out     = trim(ens_fldr)//"/"//trim(filename_out)
+
+        ! Determine output precision (int,float,double)
+        precision = "float"
+        if (present(prec)) precision = trim(prec)
 
         ! Determine number of simulations based on folders 
         nfldr = size(fldrs) 
@@ -60,6 +66,9 @@ contains
         ! Loop over folders and write variable to ensemble file
         do q = 1, nsim  
 
+            ! Reset output variable data to missing data
+            var_out = mv 
+
             ! Define file for current simulation 
             path_in = trim(fldrs(q))//"/"//trim(filename)
 
@@ -68,17 +77,57 @@ contains
             nt0 = nc_size(path_in,tname)
             if (allocated(time0)) deallocate(time0)
             allocate(time0(nt0),var_in(nt0))
-            call nc_read(path_in,tname,time0)
+            call nc_read(path_in,tname,time0,missing_value=mv)
 
             ! Read in variable 
-            call nc_read(path_in,name,var_in)
+            call nc_read(path_in,name,var_in,missing_value=mv)
 
-            ! Interpolate to new resolution 
-            var_out = interp_spline(time0,var_in,xout=time) 
+            ! ## Interpolate to new resolution ##
+            do k = 1, nt0
+                k0 = k  
+                if (var_in(k0) .ne. mv) exit 
+            end do 
+
+            do k = nt0, k0, -1 
+                k1 = k 
+                if (var_in(k1) .ne. mv) exit 
+            end do 
+
+            if (k1-k0 .le. 1) then 
+                write(*,*) "ens_1D:: error: not enough data points are available."
+                write(*,*) "filename name: ",trim(path_in), trim(name) 
+                stop 
+            end if 
+
+            l0 = minloc(abs(time-time0(k0)),dim=1)
+            l1 = minloc(abs(time-time0(k1)),dim=1)
+            
+            if (l1-l0 .le. 1) then 
+                write(*,*) "ens_1D:: error: problem with time indices."
+                write(*,*) "filename name: ",trim(path_in), trim(name) 
+                write(*,*) "filename_out : ",trim(path_out)
+                stop 
+            end if 
+            
+            var_out(l0:l1) = interp_spline(time0(k0:k1),var_in(k0:k1),xout=time(l0:l1)) 
 
             ! Write to ensemble file 
-            call nc_write(path_out,name,var_out,units=units,dim1="sim",dim2=tname, &
-                          start=[q,1],count=[1,nt])
+            select case(trim(precision))
+                case("int")
+                    call nc_write(path_out,name,int(var_out),units=units,dim1="sim", &
+                                  dim2=tname,start=[q,1],count=[1,nt],missing_value=int(mv))
+                case("float")
+                    call nc_write(path_out,name,real(var_out),units=units,dim1="sim", &
+                                  dim2=tname,start=[q,1],count=[1,nt],missing_value=real(mv))
+                case("double")
+                    call nc_write(path_out,name,var_out,units=units,dim1="sim", &
+                                  dim2=tname,start=[q,1],count=[1,nt],missing_value=mv)
+                case DEFAULT 
+                    write(*,*) "ens_1D:: error: output precision must be one of: "// &
+                               "int, real, double. Specified: "//trim(precision)
+                    stop 
+            end select 
+
         end do 
 
         return 
