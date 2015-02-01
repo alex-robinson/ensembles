@@ -13,6 +13,7 @@ usage:
 
 
 objdir = .obj
+libdir = libs
 
 # Command-line options at make call
 ifort ?= 0
@@ -50,10 +51,10 @@ ifeq ($(ifort),1)
 endif
 
 ## Individual libraries or modules ##
-$(objdir)/nml.o: nml.f90
+$(objdir)/nml.o: $(libdir)/nml.f90
 	$(FC) $(DFLAGS) $(FLAGS) -c -o $@ $<
 
-$(objdir)/ncio.o: ncio.f90
+$(objdir)/ncio.o: $(libdir)/ncio.f90
 	$(FC) $(DFLAGS) $(FLAGS) -c -o $@ $<
 
 $(objdir)/ensembles.o: ensembles.f90
