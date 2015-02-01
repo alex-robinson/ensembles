@@ -22,18 +22,20 @@ contains
 
 
 
-    subroutine ens_1D(ens_fldr,fldrs,filename,name,units,time,tname,prec)
+    subroutine ens_1D(ens_fldr,fldrs,filename,name,time,tname,prec,units)
 
         implicit none 
 
         character(len=*), intent(IN) :: ens_fldr, fldrs(:), filename 
-        character(len=*), intent(IN) :: name, units, tname
+        character(len=*), intent(IN) :: name, tname
         double precision, intent(IN) :: time(:) 
-        character(len=*), intent(IN), optional :: prec 
+        character(len=*), intent(IN), optional :: prec, units
         character(len=32) :: precision
+        character(len=256) :: var_units
 
         character(len=512)  :: filename_out
         character(len=1024) :: path_in, path_out  
+         
 
         integer :: nfldr, nsim, nt, q 
 
@@ -44,9 +46,19 @@ contains
         filename_out = "ens_"//trim(filename)
         path_out     = trim(ens_fldr)//"/"//trim(filename_out)
 
+        ! Define first source file for loading units, etc
+        path_in = trim(fldrs(1))//"/"//trim(filename)
+
         ! Determine output precision (int,float,double)
         precision = "float"
         if (present(prec)) precision = trim(prec)
+
+        ! Determine units 
+        if (present(units)) then 
+            var_units = trim(units)
+        else 
+            call nc_read_attr(path_in,varname=name,name="units",value=var_units)
+        end if 
 
         ! Determine number of simulations based on folders 
         nfldr = size(fldrs) 
@@ -115,13 +127,13 @@ contains
             ! Write to ensemble file 
             select case(trim(precision))
                 case("int")
-                    call nc_write(path_out,name,int(var_out),units=units,dim1="sim", &
+                    call nc_write(path_out,name,int(var_out),units=var_units,dim1="sim", &
                                   dim2=tname,start=[q,1],count=[1,nt],missing_value=int(mv))
                 case("float")
-                    call nc_write(path_out,name,real(var_out),units=units,dim1="sim", &
+                    call nc_write(path_out,name,real(var_out),units=var_units,dim1="sim", &
                                   dim2=tname,start=[q,1],count=[1,nt],missing_value=real(mv))
                 case("double")
-                    call nc_write(path_out,name,var_out,units=units,dim1="sim", &
+                    call nc_write(path_out,name,var_out,units=var_units,dim1="sim", &
                                   dim2=tname,start=[q,1],count=[1,nt],missing_value=mv)
                 case DEFAULT 
                     write(*,*) "ens_1D:: error: output precision must be one of: "// &

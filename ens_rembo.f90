@@ -104,10 +104,10 @@ program ens_rembo
     filename = "sico.1d.nc"
     call ens_init(ens_fldr,filename,nsim,t=time_out,tname=tname,tunits=tunits)
 
-    call ens_1D(ens_fldr,fldrs,filename,name="Vtot",units="1e6 km^3", &
-                time=time_out,tname="time",prec="float")
-    call ens_1D(ens_fldr,fldrs,filename,name="Aib",units="1e6 km^2", &
-                time=time_out,tname="time",prec="float")
+    call ens_1D(ens_fldr,fldrs,filename,name="Vtot",time=time_out,tname="time", &
+                prec="float") !,units="1e6 km^3")
+    call ens_1D(ens_fldr,fldrs,filename,name="Aib",time=time_out,tname="time", &
+                prec="float") !,units="1e6 km^2")
 
 
 
