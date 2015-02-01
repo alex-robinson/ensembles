@@ -10,17 +10,16 @@ program ens_rembo
 
     implicit none 
 
-    character(len=512) :: ens_fldr, filename 
+    character(len=512) :: ens_fldr, filename
+    character(len=512), allocatable :: fldrs(:) 
     
     double precision, allocatable :: time_in(:), time_out(:), x(:), y(:), m(:)
     character(len=256) :: tname, tunits, xname, xunits, yname, yunits, mname, munits
 
     character(len=512), allocatable :: names(:), units(:)
 
-    integer :: nsim, nt, nx, ny, nm
-    integer :: nvar  
-
-    integer :: k 
+    integer :: nsim, nt, nx, ny, nm, nvar, k 
+    double precision :: t0, t1, dt 
 
     ens_fldr = "output"
 
@@ -66,21 +65,49 @@ program ens_rembo
         m(k) = dble(k)
     end do
 
-    ! 1D ensemble file
-    filename = "sico.nc"
+!     ! 1D ensemble file
+!     filename = "sico.nc"
+!     call ens_init(ens_fldr,filename,nsim,t=time_out,tname=tname,tunits=tunits)
+
+!     ! 2D ensemble file 
+!     filename = "sico2D.nc"
+!     call ens_init(ens_fldr,filename,nsim,x=x,xname=xname,xunits=xunits, &
+!                   t=time_out,tname=tname,tunits=tunits)
+
+!     ! 2D ensemble file: rembo[month,time]
+!     filename = "rembo.nc"
+!     call ens_init(ens_fldr,filename,nsim,x=m,xname=mname,xunits=munits, &
+!                   t=time_out,tname=tname,tunits=tunits)
+
+    ! ### Test writing sico data 
+
+    ! Define folders
+    nsim = 5 
+    allocate(fldrs(nsim))
+    do k = 1, nsim 
+        write(fldrs(k),"(a,i1)") "data/test_sico",k
+    end do 
+
+    ! Define output times 
+    t0 = 1700
+    t1 = 3000 
+    dt = 1
+
+    nt = (t1-t0)/dt + 1
+    if (allocated(time_out)) deallocate(time_out)
+    allocate(time_out(nt))
+    do k = 1, nt 
+        time_out(k) = t0 + dt*(k-1)
+    end do 
+
+    ! Write some fields
+    filename = "sico.1d.nc"
     call ens_init(ens_fldr,filename,nsim,t=time_out,tname=tname,tunits=tunits)
 
-    ! 2D ensemble file 
-    filename = "sico2D.nc"
-    call ens_init(ens_fldr,filename,nsim,x=x,xname=xname,xunits=xunits, &
-                  t=time_out,tname=tname,tunits=tunits)
-
-    ! 2D ensemble file: rembo[month,time]
-    filename = "rembo.nc"
-    call ens_init(ens_fldr,filename,nsim,x=m,xname=mname,xunits=munits, &
-                  t=time_out,tname=tname,tunits=tunits)
-
-
+    call ens_1D(ens_fldr,fldrs,filename,name="Vtot",units="1e6 km^3", &
+                time=time_out,tname="time",prec="float")
+    call ens_1D(ens_fldr,fldrs,filename,name="Aib",units="1e6 km^2", &
+                time=time_out,tname="time",prec="float")
 
 
 

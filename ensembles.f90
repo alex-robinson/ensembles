@@ -15,7 +15,7 @@ module ensembles
 
 
     private 
-    public :: ens_init
+    public :: ens_init, ens_1D
 
 contains 
 
@@ -76,6 +76,7 @@ contains
             path_in = trim(fldrs(1))//"/"//trim(filename)
             nt0 = nc_size(path_in,tname)
             if (allocated(time0)) deallocate(time0)
+            if (allocated(var_in)) deallocate(var_in)
             allocate(time0(nt0),var_in(nt0))
             call nc_read(path_in,tname,time0,missing_value=mv)
 
@@ -128,6 +129,7 @@ contains
                     stop 
             end select 
 
+            write(*,"(a,a,2x,a,i3)") "ens_1D:: written: ",trim(path_out), trim(name), q 
         end do 
 
         return 
