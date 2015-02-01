@@ -57,12 +57,39 @@ $(objdir)/nml.o: $(libdir)/nml.f90
 $(objdir)/ncio.o: $(libdir)/ncio.f90
 	$(FC) $(DFLAGS) $(FLAGS) -c -o $@ $<
 
+$(objdir)/planet.o: $(libdir)/coord/planet.f90
+	$(FC) $(DFLAGS) $(FLAGS) -c -o $@ $<
+
+$(objdir)/geodesic.o: $(libdir)/coord/geodesic.f90
+	$(FC) $(DFLAGS) $(FLAGS) -c -o $@ $<
+
+$(objdir)/projection_oblimap2.o: $(libdir)/coord/projection_oblimap2.f90
+	$(FC) $(DFLAGS) $(FLAGS) -c -o $@ $<
+
+$(objdir)/interp1D.o: $(libdir)/coord/interp1D.f90
+	$(FC) $(DFLAGS) $(FLAGS) -c -o $@ $<
+
+$(objdir)/interp2D.o: $(libdir)/coord/interp2D.f90
+	$(FC) $(DFLAGS) $(FLAGS) -c -o $@ $<
+
+$(objdir)/interp_time.o: $(libdir)/coord/interp_time.f90 $(objdir)/interp1D.o
+	$(FC) $(DFLAGS) $(FLAGS) -c -o $@ $<
+
+$(objdir)/coordinates.o: $(libdir)/coord/coordinates.f90  \
+						 $(objdir)/geodesic.o $(objdir)/planet.o \
+						 $(objdir)/projection_oblimap2.o \
+						 $(objdir)/ncio.o
+	$(FC) $(DFLAGS) $(FLAGS) -c -o $@ $<
+
 $(objdir)/ensembles.o: ensembles.f90
 	$(FC) $(DFLAGS) $(FLAGS) -c -o $@ $<
 
 ## Complete programs
 
-ens-rembo: $(objdir)/nml.o $(objdir)/ncio.o $(objdir)/ensembles.o
+ens-rembo: $(objdir)/nml.o $(objdir)/ncio.o $(objdir)/interp1D.o \
+		   $(objdir)/geodesic.o $(objdir)/planet.o \
+	       $(objdir)/projection_oblimap2.o $(objdir)/coordinates.o \
+		   $(objdir)/ensembles.o
 	$(FC) $(DFLAGS) $(FLAGS) -o ens_rembo.x $^ ens_rembo.f90 $(LFLAGS)
 	@echo " "
 	@echo "    ens_rembo.x is ready."
