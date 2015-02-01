@@ -22,21 +22,20 @@ contains
 
 
 
-    subroutine ens_1D(ens_fldr,fldrs,filename,name,time,tname,prec,units)
+    subroutine ens_1D(ens_fldr,fldrs,filename,name,time,tname,prec,units,interp)
 
         implicit none 
 
         character(len=*), intent(IN) :: ens_fldr, fldrs(:), filename 
         character(len=*), intent(IN) :: name, tname
         double precision, intent(IN) :: time(:) 
-        character(len=*), intent(IN), optional :: prec, units
+        character(len=*), intent(IN), optional :: prec, units, interp 
         character(len=32) :: precision
-        character(len=256) :: var_units
+        character(len=256) :: var_units, interpolation 
 
         character(len=512)  :: filename_out
         character(len=1024) :: path_in, path_out  
          
-
         integer :: nfldr, nsim, nt, q 
 
         double precision, allocatable :: time0(:), var_in(:), var_out(:)
@@ -59,6 +58,10 @@ contains
         else 
             call nc_read_attr(path_in,varname=name,name="units",value=var_units)
         end if 
+
+        ! Determine interpolation option 
+        interpolation = "spline"
+        if (present(interp)) interpolation = trim(interp)
 
         ! Determine number of simulations based on folders 
         nfldr = size(fldrs) 
@@ -122,7 +125,17 @@ contains
                 stop 
             end if 
             
-            var_out(l0:l1) = interp_spline(time0(k0:k1),var_in(k0:k1),xout=time(l0:l1)) 
+            select case(trim(interpolation))
+                case("spline")
+                    var_out(l0:l1) = interp_spline(time0(k0:k1),var_in(k0:k1),xout=time(l0:l1)) 
+                case("linear")
+                    var_out(l0:l1) = interp_linear(time0(k0:k1),var_in(k0:k1),xout=time(l0:l1)) 
+                case("align")
+                    var_out(l0:l1) = interp_align(time0(k0:k1),var_in(k0:k1),xout=time(l0:l1)) 
+                case DEFAULT 
+                    write(*,*) "ens_1D:: error: interpolation method must be one of: spline, linear, align."
+                    stop 
+            end select
 
             ! Write to ensemble file 
             select case(trim(precision))

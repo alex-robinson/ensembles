@@ -39,47 +39,13 @@ program ens_rembo
     mname  = "month"
     munits = "" 
 
-    nsim = 5 
-
-    nt = 10 
-    allocate(time_out(nt))
-    do k = 1, nt 
-        time_out(k) = dble(k)*2.d0
-    end do 
-
-    nx = 12 
-    allocate(x(nx))
-    do k = 1, nx 
-        x(k) = dble(k)*2.d0
-    end do 
-
-    ny = 24 
-    allocate(y(ny))
-    do k = 1, ny 
-        y(k) = dble(k)*2.d0
-    end do
-
     nm = 13 
     allocate(m(nm))
     do k = 1, nm 
         m(k) = dble(k)
     end do
 
-!     ! 1D ensemble file
-!     filename = "sico.nc"
-!     call ens_init(ens_fldr,filename,nsim,t=time_out,tname=tname,tunits=tunits)
-
-!     ! 2D ensemble file 
-!     filename = "sico2D.nc"
-!     call ens_init(ens_fldr,filename,nsim,x=x,xname=xname,xunits=xunits, &
-!                   t=time_out,tname=tname,tunits=tunits)
-
-!     ! 2D ensemble file: rembo[month,time]
-!     filename = "rembo.nc"
-!     call ens_init(ens_fldr,filename,nsim,x=m,xname=mname,xunits=munits, &
-!                   t=time_out,tname=tname,tunits=tunits)
-
-    ! ### Test writing sico data 
+    ! ### Test writing sico 1D data ###
 
     ! Define folders
     nsim = 5 
@@ -90,7 +56,7 @@ program ens_rembo
 
     ! Define output times 
     t0 = 1700
-    t1 = 3000 
+    t1 = 1720 
     dt = 1
 
     nt = (t1-t0)/dt + 1
@@ -104,10 +70,8 @@ program ens_rembo
     filename = "sico.1d.nc"
     call ens_init(ens_fldr,filename,nsim,t=time_out,tname=tname,tunits=tunits)
 
-    call ens_1D(ens_fldr,fldrs,filename,name="Vtot",time=time_out,tname="time", &
-                prec="float") !,units="1e6 km^3")
-    call ens_1D(ens_fldr,fldrs,filename,name="Aib",time=time_out,tname="time", &
-                prec="float") !,units="1e6 km^2")
+    call ens_1D(ens_fldr,fldrs,filename,name="Vtot",time=time_out,tname="time",prec="float",interp="align")
+    call ens_1D(ens_fldr,fldrs,filename,name="Aib", time=time_out,tname="time",prec="float")
 
 
 
