@@ -70,9 +70,21 @@ program ens_rembo
     filename = "sico.1d.nc"
     call ens_init(ens_fldr,filename,nsim,t=time_out,tname=tname,tunits=tunits)
 
-    call ens_1D(ens_fldr,fldrs,filename,name="Vtot",time=time_out,tname="time",prec="float",interp="align")
-    call ens_1D(ens_fldr,fldrs,filename,name="Aib", time=time_out,tname="time",prec="float")
+!     call ens_1D(ens_fldr,fldrs,filename,name="Vtot",time=time_out,tname="time",prec="real",interp="align")
+!     call ens_1D(ens_fldr,fldrs,filename,name="Aib", time=time_out,tname="time",prec="real")
 
+    call ens_write(ens_fldr,fldrs,filename,"Aib",tname="time",time=time_out,prec="real")
 
+    if (allocated(x)) deallocate(x)
+    allocate(x(13))
+    do k = 1,13
+        x(k) = dble(k)
+    end do 
+
+    filename = "rembo.gis.nc"
+    call ens_init(ens_fldr,filename,nsim,t=time_out,tname=tname,tunits=tunits, &
+                  x=x,xname="month",xunits="")
+
+    call ens_write(ens_fldr,fldrs,filename,"tt",tname="time",time=time_out)
 
 end program ens_rembo 
