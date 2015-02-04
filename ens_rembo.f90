@@ -72,7 +72,7 @@ program ens_rembo
     
     ! Test static 2D writing
     filename = "rembo.gis.nc"
-    call ens_init(ens_fldr,fldrs,filename,names=["month","time "])
+    call ens_init(ens_fldr,fldrs,filename,names=["month","time "],t=time_out,tname=tname,tunits=tunits)
 
     call ens_write(ens_fldr,fldrs,filename,"tt")
     call ens_write(ens_fldr,fldrs,filename,"pp")
