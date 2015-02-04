@@ -79,9 +79,10 @@ program ens_rembo
 
     ! Test static 3D writing
     filename = "sico.2d.nc"
-    call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"])
+    call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"], &
+        t=time_out,tname=tname,tunits=tunits)
 
-    call ens_write(ens_fldr,fldrs,filename,"zs")
+    call ens_write(ens_fldr,fldrs,filename,"zs",method="align")
     call ens_write(ens_fldr,fldrs,filename,"zb")
 
     

@@ -12,11 +12,6 @@ module ensembles
     double precision, parameter :: mv = -9999.d0
 
 
-    interface ens_write
-        module procedure ens_write_static 
-!         module procedure ens_write_temporal
-    end interface
-
     interface ens_interp 
         module procedure ens_interp_1D
         module procedure ens_interp_2D
@@ -28,7 +23,7 @@ module ensembles
 
 contains 
 
-    subroutine ens_write_static(ens_fldr,fldrs,filename,name,prec,units,method)
+    subroutine ens_write(ens_fldr,fldrs,filename,name,prec,units,method)
         ! This routine will prepare a file for writing ensemble data,
         ! assuming the dimension variables already exist. It determines
         ! the shape of the current variable from the first file, and 
@@ -76,10 +71,11 @@ contains
             call nc_read_attr(path_in,varname=name,name="units",value=var_units)
         end if 
 
-        ! Get dim names and lengths
+        ! Get dim names and lengths in input file
         call nc_dims(path_in,name=name,names=names,dims=dims)
         ndim  = size(dims)
 
+        ! Get dim names and lengths in output file
         ndim1 = ndim+1 
         allocate(names1(ndim1),dims1(ndim1))
         names1(1)       = "sim"
@@ -121,7 +117,8 @@ contains
         nfldr = size(fldrs) 
         nsim  = nc_size(path_out,"sim")
         if (nfldr .ne. nsim) then 
-            write(*,*) "ens_write:: error: number of folders does not match number of sims in the file."
+            write(*,*) "ens_write:: error: number of folders does not&
+                       & match number of sims in the file."
             write(*,*) "ensemble file: ",trim(path_out)
             write(*,*) "nfolders = ",nfldr 
             write(*,*) "nsims    = ",nsim
@@ -165,14 +162,11 @@ contains
                     end if
 
                     ! Define current start and count
-                    start = 1
+                    start    = 1
                     start(1) = q 
-                    count = dims1 
+                    count    = dims1 
                     count(1) = 1 
 
-                    write(*,"(a12,4i6)") "start: ", start 
-                    write(*,"(a12,4i6)") "count: ", count 
-                    
                     ! Write to ensemble file 
                     select case(trim(precision))
                         case("int")
@@ -227,14 +221,11 @@ contains
                     end if
 
                     ! Define current start and count
-                    start = 1
+                    start    = 1
                     start(1) = q 
-                    count = dims1 
+                    count    = dims1 
                     count(1) = 1 
 
-                    write(*,"(a12,4i6)") "start: ", start 
-                    write(*,"(a12,4i6)") "count: ", count 
-                    
                     ! Write to ensemble file 
                     select case(trim(precision))
                         case("int")
@@ -287,27 +278,12 @@ contains
 
                     end if
 
-                    ! Check if interpolation is needed 
-                    if (dims1(ndim1) .ne. dims(ndim)) then 
-
-                        write(*,*) "Perform interpolation..."
-                        stop
-                    else 
-                        if (allocated(vout3D)) deallocate(vout3D)
-                        allocate(vout3D(dims(1),dims(2),dims(3)))
-                        vout3D = vin3D
-
-                    end if
-
                     ! Define current start and count
-                    start = 1
+                    start    = 1
                     start(1) = q 
-                    count = dims1 
+                    count    = dims1 
                     count(1) = 1 
 
-                    write(*,"(a12,4i6)") "start: ", start 
-                    write(*,"(a12,4i6)") "count: ", count 
-                    
                     ! Write to ensemble file 
                     select case(trim(precision))
                         case("int")
@@ -339,219 +315,7 @@ contains
 
         return 
 
-    end subroutine ens_write_static
-
-    subroutine ens_write_temporal(ens_fldr,fldrs,filename,name,tname,method,prec,units)
-        ! This routine will prepare a file for writing ensemble data,
-        ! assuming the dimension variables already exist. It determines
-        ! the shape of the current variable from the first file, and 
-        ! can potentially interpolate one dimension (ie, time) using 
-        ! a spline or linear approximation. 
-
-        implicit none 
-
-        character(len=*), intent(IN) :: ens_fldr, fldrs(:), filename 
-        character(len=*), intent(IN) :: name, tname, method
-        character(len=*), intent(IN), optional :: prec, units
-        character(len=32) :: precision
-        character(len=256) :: var_units
-
-        character(len=512)  :: filename_out
-        character(len=1024) :: path_in, path_out  
-        
-        character(len=32), allocatable :: names(:), names1(:)
-        integer, allocatable :: dims(:), dims1(:)
-
-        integer :: nfldr, nsim, ndim, ndim1, nt
-
-        double precision, allocatable :: tin1D(:), tout1D(:), vout1D(:)
-        double precision, allocatable :: vin1D(:), vin2D(:,:), vin3D(:,:) 
-        integer :: q, k, k0, k1, l0, l1, i, j  
-
-        ! Define output ensemble filename 
-        filename_out = "ens_"//trim(filename)
-        path_out     = trim(ens_fldr)//"/"//trim(filename_out)
-
-        ! Define first source file for loading units, etc.
-        path_in = trim(fldrs(1))//"/"//trim(filename)
-
-        ! Determine output precision (int,real,double)
-        precision = "real"
-        if (present(prec)) precision = trim(prec)
-
-        ! Determine units 
-        if (present(units)) then 
-            var_units = trim(units)
-        else 
-            call nc_read_attr(path_in,varname=name,name="units",value=var_units)
-        end if 
-
-        ! Get dim names and lengths
-        call nc_dims(path_in,name=name,names=names,dims=dims)
-        ndim  = size(dims)
-
-        ndim1 = ndim+1 
-        allocate(names1(ndim1),dims1(ndim1))
-        names1(1)       = "sim"
-        names1(2:ndim1) = names 
-        names1(ndim1)   = tname 
-        do k = 1, ndim1
-            dims1(k) = nc_size(path_out,names1(k))
-        end do 
-
-        write(*,"(a,2x,a,1x,a1,1x,a)") "ens_write:: "//trim(path_out), trim(name), ":", trim(precision)
-        do k = 1, ndim1 
-            write(*,"(a12,i6)") names1(k), dims1(k)
-        end do 
-
-        ! Determine number of simulations based on folders 
-        nfldr = size(fldrs) 
-        nsim  = nc_size(path_out,"sim")
-        if (nfldr .ne. nsim) then 
-            write(*,*) "ens_write:: error: number of folders does not match number of sims in the file."
-            write(*,*) "ensemble file: ",trim(path_out)
-            write(*,*) "nfolders = ",nfldr 
-            write(*,*) "nsims    = ",nsim
-        end if 
-
-        ! Allocate the output variable, read time axis from ensemble file
-        nt = nc_size(path_out,tname)
-        allocate(tout1D(nt),vout1D(nt))
-        call nc_read(path_out,tname,tout1D)
-
-        ! Loop over folders and write variable to ensemble file
-        do q = 1, nsim  
-
-            ! Reset output variable data to missing data
-            vout1D = mv 
-
-            ! Define file for current simulation 
-            path_in = trim(fldrs(q))//"/"//trim(filename)
-
-            ! Get original time length and dimension
-            nt = nc_size(path_in,tname)
-            if (allocated(tin1D)) deallocate(tin1D)
-            if (allocated(vin1D)) deallocate(vin1D)
-            allocate(tin1D(nt),vin1D(nt))
-            call nc_read(path_in,tname,tin1D,missing_value=mv)
-
-            select case(ndim)
-
-                case(1)
-
-                    ! Read in variable 
-                    call nc_read(path_in,name,vin1D,missing_value=mv,start=[1],count=[dims(1)])
-
-                    ! Interpolate input data 
-                    vout1D = ens_interp_1D(tin1D,vin1D,tout1D,missing_value=mv,method=method)
-
-                    ! Write to ensemble file 
-                    select case(trim(precision))
-                        case("int")
-                            call nc_write(path_out,name,int(vout1D),units=var_units, &
-                                          dim1="sim",dim2=names1(2), &
-                                          start=[q,1],count=[1,dims1(2)],missing_value=int(mv))
-                        case("real")
-                            call nc_write(path_out,name,real(vout1D),units=var_units, &
-                                          dim1="sim",dim2=names1(2), &
-                                          start=[q,1],count=[1,dims1(2)],missing_value=real(mv))
-                        case("double")
-                            call nc_write(path_out,name,vout1D,units=var_units, &
-                                          dim1="sim",dim2=names1(2), &
-                                          start=[q,1],count=[1,dims1(2)],missing_value=mv)
-                        case DEFAULT 
-                            write(*,*) "ens_write:: error: output precision must be one of: "// &
-                                       "int, real, double. Specified: "//trim(precision)
-                            stop 
-                    end select 
-
-                    write(*,"(a,a,2x,a,i3)") "ens_write:: 1D field written: ", &
-                                             trim(path_out), trim(name), q 
-                    
-                case(2)
-
-                    ! Loop over dimensions
-                    do i = 1,dims(1)
-                        ! Read in variable 
-                        call nc_read(path_in,name,vin1D,missing_value=mv, &
-                                     start=[i,1],count=[1,dims(2)])
-
-                        ! Interpolate input data 
-                        vout1D = ens_interp_1D(tin1D,vin1D,tout1D,missing_value=mv,method=method)
-
-                        ! Write to ensemble file 
-                        select case(trim(precision))
-                            case("int")
-                                call nc_write(path_out,name,int(vout1D),units=var_units, &
-                                              dim1="sim",dim2=names(1),dim3=names1(3), &
-                                              start=[q,i,1],count=[1,1,dims1(3)],missing_value=int(mv))
-                            case("real")
-                                call nc_write(path_out,name,real(vout1D),units=var_units, &
-                                              dim1="sim",dim2=names(1),dim3=names1(3), &
-                                              start=[q,i,1],count=[1,1,dims1(3)],missing_value=real(mv))
-                            case("double")
-                                call nc_write(path_out,name,vout1D,units=var_units, &
-                                              dim1="sim",dim2=names(1),dim3=names1(3), &
-                                              start=[q,i,1],count=[1,1,dims1(3)],missing_value=mv)
-                            case DEFAULT 
-                                write(*,*) "ens_write:: error: output precision must be one of: "// &
-                                           "int, real, double. Specified: "//trim(precision)
-                                stop 
-                        end select 
-                    end do 
-
-                    write(*,"(a,a,2x,a,i3)") "ens_write:: 2D field written: ", &
-                                             trim(path_out), trim(name), q 
-
-                case(3)
-
-                    ! Loop over dimensions
-                    do i = 1,dims(1)
-                    do j = 1,dims(2)
-                        ! Read in variable 
-                        call nc_read(path_in,name,vin1D,missing_value=mv, &
-                                     start=[i,j,1],count=[1,1,dims(3)])
-
-                        ! Interpolate input data 
-                        vout1D = ens_interp_1D(tin1D,vin1D,tout1D,missing_value=mv,method="align")
-
-                        ! Write to ensemble file 
-                        select case(trim(precision))
-                            case("int")
-                                call nc_write(path_out,name,int(vout1D),units=var_units, &
-                                              dim1="sim",dim2=names(1),dim3=names(2),dim4=names1(4), &
-                                              start=[q,i,j,1],count=[1,1,1,dims1(4)],missing_value=int(mv))
-                            case("real")
-                                call nc_write(path_out,name,real(vout1D),units=var_units, &
-                                              dim1="sim",dim2=names(1),dim3=names(2),dim4=names1(4), &
-                                              start=[q,i,j,1],count=[1,1,1,dims1(4)],missing_value=real(mv))
-                            case("double")
-                                call nc_write(path_out,name,vout1D,units=var_units, &
-                                              dim1="sim",dim2=names(1),dim3=names(2),dim4=names1(4), &
-                                              start=[q,i,j,1],count=[1,1,1,dims1(4)],missing_value=mv)
-                            case DEFAULT 
-                                write(*,*) "ens_write:: error: output precision must be one of: "// &
-                                           "int, real, double. Specified: "//trim(precision)
-                                stop 
-                        end select 
-                    end do 
-                    end do
-
-                    write(*,"(a,a,2x,a,i3)") "ens_write:: 3D field written: ", &
-                                             trim(path_out), trim(name), q 
-
-                case DEFAULT
-                    write(*,*) "ens_write:: error: number of dimensions not handled."
-                    write(*,*) "path, name, ndim: ", trim(path_in), trim(name), ndim 
-                    stop 
-
-            end select
-
-        end do  
-
-        return 
-
-    end subroutine ens_write_temporal
+    end subroutine ens_write
 
     subroutine ens_init(ens_fldr,fldrs,filename,names,t,tname,tunits)
 
