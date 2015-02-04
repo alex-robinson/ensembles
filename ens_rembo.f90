@@ -13,37 +13,16 @@ program ens_rembo
     character(len=512) :: ens_fldr, filename
     character(len=512), allocatable :: fldrs(:) 
     
-    double precision, allocatable :: time_in(:), time_out(:), x(:), y(:), m(:)
-    character(len=256) :: tname, tunits, xname, xunits, yname, yunits, mname, munits
+    double precision, allocatable :: time_out(:)
+    character(len=256) :: tname, tunits
 
-    character(len=512), allocatable :: names(:), units(:)
-
-    integer :: nsim, nt, nx, ny, nm, nvar, k 
-    double precision :: t0, t1, dt 
+    integer :: nsim, nt, k
+    double precision :: t0, t1, dt
 
     ens_fldr = "output"
 
-    allocate(names(3),units(3)) 
-    names = ["var1","var2","var3"]
-    units = ["m","m","m"]
-
     tname  = "time"
     tunits = "ka BP"
-
-    xname  = "xc"
-    xunits = "km"
-
-    yname  = "yc"
-    yunits = "km" 
-
-    mname  = "month"
-    munits = "" 
-
-    nm = 13 
-    allocate(m(nm))
-    do k = 1, nm 
-        m(k) = dble(k)
-    end do
 
     ! ### Test writing sico 1D data ###
 
@@ -68,23 +47,29 @@ program ens_rembo
 
     ! Write some fields
     filename = "sico.1d.nc"
-    call ens_init(ens_fldr,filename,nsim,t=time_out,tname=tname,tunits=tunits)
+    call ens_init(ens_fldr,fldrs,filename,names=["time"],t=time_out,tname=tname,tunits=tunits)
 
-!     call ens_1D(ens_fldr,fldrs,filename,name="Vtot",time=time_out,tname="time",prec="real",interp="align")
-!     call ens_1D(ens_fldr,fldrs,filename,name="Aib", time=time_out,tname="time",prec="real")
+    call ens_write(ens_fldr,fldrs,filename,"Vtot",tname="time",prec="real",method="align")
+    call ens_write(ens_fldr,fldrs,filename,"Aib",tname="time",prec="real")
 
-    call ens_write(ens_fldr,fldrs,filename,"Aib",tname="time",time=time_out,prec="real")
-
-    if (allocated(x)) deallocate(x)
-    allocate(x(13))
-    do k = 1,13
-        x(k) = dble(k)
-    end do 
-
+    ! Test 2D writing
     filename = "rembo.gis.nc"
-    call ens_init(ens_fldr,filename,nsim,t=time_out,tname=tname,tunits=tunits, &
-                  x=x,xname="month",xunits="")
+    call ens_init(ens_fldr,fldrs,filename,names=["month","time "],t=time_out,tname=tname,tunits=tunits)
 
-    call ens_write(ens_fldr,fldrs,filename,"tt",tname="time",time=time_out)
+    call ens_write(ens_fldr,fldrs,filename,"tt",tname="time")
+    call ens_write(ens_fldr,fldrs,filename,"pp",tname="time")
+
+    ! Test 3D writing
+    if (allocated(time_out)) deallocate(time_out)
+    allocate(time_out(5))
+    time_out = [1700.d0, 2700.d0, 3700.d0, 4700.d0, 5700.d0]
+
+    filename = "sico.2d.nc"
+    call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"],t=time_out,tname=tname,tunits=tunits)
+
+    call ens_write(ens_fldr,fldrs,filename,"zs",tname="time")
+    call ens_write(ens_fldr,fldrs,filename,"zb",tname="time")
+
+    
 
 end program ens_rembo 
