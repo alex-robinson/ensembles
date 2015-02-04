@@ -45,30 +45,44 @@ program ens_rembo
         time_out(k) = t0 + dt*(k-1)
     end do 
 
-    ! Write some fields
-    filename = "sico.1d.nc"
-    call ens_init(ens_fldr,fldrs,filename,names=["time"],t=time_out,tname=tname,tunits=tunits)
+!     ! Write some fields
+!     filename = "sico.1d.nc"
+!     call ens_init(ens_fldr,fldrs,filename,names=["time"],t=time_out,tname=tname,tunits=tunits)
 
-    call ens_write(ens_fldr,fldrs,filename,"Vtot",tname="time",prec="real",method="align")
-    call ens_write(ens_fldr,fldrs,filename,"Aib",tname="time",prec="real")
+!     call ens_write(ens_fldr,fldrs,filename,"Vtot",tname="time",prec="real",method="align")
+!     call ens_write(ens_fldr,fldrs,filename,"Aib",tname="time",prec="real")
 
-    ! Test 2D writing
+!     ! Test 2D writing
+!     filename = "rembo.gis.nc"
+!     call ens_init(ens_fldr,fldrs,filename,names=["month","time "],t=time_out,tname=tname,tunits=tunits)
+
+!     call ens_write(ens_fldr,fldrs,filename,"tt",tname="time")
+!     call ens_write(ens_fldr,fldrs,filename,"pp",tname="time")
+
+!     ! Test 3D writing
+!     if (allocated(time_out)) deallocate(time_out)
+!     allocate(time_out(5))
+!     time_out = [1700.d0, 2700.d0, 3700.d0, 4700.d0, 5700.d0]
+
+!     filename = "sico.2d.nc"
+!     call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"],t=time_out,tname=tname,tunits=tunits)
+
+!     call ens_write(ens_fldr,fldrs,filename,"zs",tname="time")
+!     call ens_write(ens_fldr,fldrs,filename,"zb",tname="time")
+    
+    ! Test static 2D writing
     filename = "rembo.gis.nc"
-    call ens_init(ens_fldr,fldrs,filename,names=["month","time "],t=time_out,tname=tname,tunits=tunits)
+    call ens_init(ens_fldr,fldrs,filename,names=["month","time "])
 
-    call ens_write(ens_fldr,fldrs,filename,"tt",tname="time")
-    call ens_write(ens_fldr,fldrs,filename,"pp",tname="time")
+    call ens_write(ens_fldr,fldrs,filename,"tt")
+    call ens_write(ens_fldr,fldrs,filename,"pp")
 
-    ! Test 3D writing
-    if (allocated(time_out)) deallocate(time_out)
-    allocate(time_out(5))
-    time_out = [1700.d0, 2700.d0, 3700.d0, 4700.d0, 5700.d0]
-
+    ! Test static 3D writing
     filename = "sico.2d.nc"
-    call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"],t=time_out,tname=tname,tunits=tunits)
+    call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"])
 
-    call ens_write(ens_fldr,fldrs,filename,"zs",tname="time")
-    call ens_write(ens_fldr,fldrs,filename,"zb",tname="time")
+    call ens_write(ens_fldr,fldrs,filename,"zs")
+    call ens_write(ens_fldr,fldrs,filename,"zb")
 
     
 
