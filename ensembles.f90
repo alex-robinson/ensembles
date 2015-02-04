@@ -5,13 +5,15 @@ module ensembles
 
     use interp1D 
     use ncio 
+    use nml 
+    use parameters
 
     implicit none 
 
-
+    ! Default missing value
     double precision, parameter :: mv = -9999.d0
 
-
+    ! private interface to ensemble interpolation routines
     interface ens_interp 
         module procedure ens_interp_1D
         module procedure ens_interp_2D
@@ -19,9 +21,87 @@ module ensembles
     end interface
 
     private 
-    public :: ens_init, ens_write
+    public :: ens_init, ens_write, ens_write_par
 
 contains 
+
+    subroutine ens_write_par(ens_fldr,fldrs,filename,fmt,names)
+        ! This routine will prepare a file for writing ensemble data,
+        ! assuming the dimension variables already exist. It determines
+        ! the shape of the current variable from the first file, and 
+        ! can potentially interpolate one dimension (ie, time) using 
+        ! a spline or linear approximation. 
+
+        implicit none 
+
+        character(len=*), intent(IN) :: ens_fldr, fldrs(:), filename 
+        character(len=*), intent(IN) :: fmt, names(:)
+
+        character(len=512)  :: filename_out
+        character(len=1024) :: path_in, path_out  
+        double precision :: values(size(names))
+        integer :: nfldr, nsim, np, q, i 
+        integer :: ncid  
+
+        ! Check if file format is supported
+        if (trim(fmt) .ne. "nml" .and. trim(fmt) .ne. "options") then 
+            write(*,*) "ens_write_par:: error: parameter file format not supported: "//trim(fmt)
+            stop
+        end if 
+
+        ! Define output ensemble filename 
+        filename_out = "ens_"//trim(filename)
+        path_out     = trim(ens_fldr)//"/"//trim(filename_out)//".nc"
+
+        ! Define first source file for loading units, etc.
+        path_in = trim(fldrs(1))//"/"//trim(filename)
+
+        ! Determine number of simulations based on folders 
+        nfldr = size(fldrs) 
+        nsim  = nfldr 
+        np    = size(names)
+
+        ! Create output file 
+        call nc_create(path_out)
+        call nc_write_dim(path_out,"sim",x=1,dx=1,nx=nsim)
+
+        ! Loop over folders and write variable to ensemble file
+        do q = 1, nsim  
+
+            if (trim(fmt) .eq. "options") then 
+                ! Get the parameter choices from the options file,
+                ! and save these values to the global parameter array
+                call get_params(trim(path_in))
+                
+                ! Now load the parameters of interest 
+                do i = 1, np
+                    values(i) = param(names(i))
+                end do 
+
+            else 
+                write(*,*) "To load from nml file..."
+                stop 
+            end if 
+
+            ! Define file for current simulation and write
+            ! parameters to it
+            path_in = trim(fldrs(q))//"/"//trim(filename)
+
+            call nc_open(path_out,ncid,writable=.TRUE.)
+
+            do i = 1, np 
+                write(*,*) "ens_write_par:: ",trim(path_out)," ",trim(names(i))," ",values(i)
+                call nc_write(path_out,names(i),values(i),dim1="sim", &
+                              start=[q],count=[1],ncid=ncid)
+            end do 
+
+            call nc_close(ncid)
+
+        end do 
+
+        return 
+
+    end subroutine ens_write_par 
 
     subroutine ens_write(ens_fldr,fldrs,filename,name,prec,units,method)
         ! This routine will prepare a file for writing ensemble data,

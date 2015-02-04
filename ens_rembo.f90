@@ -45,39 +45,26 @@ program ens_rembo
         time_out(k) = t0 + dt*(k-1)
     end do 
 
-!     ! Write some fields
-!     filename = "sico.1d.nc"
-!     call ens_init(ens_fldr,fldrs,filename,names=["time"],t=time_out,tname=tname,tunits=tunits)
-
-!     call ens_write(ens_fldr,fldrs,filename,"Vtot",tname="time",prec="real",method="align")
-!     call ens_write(ens_fldr,fldrs,filename,"Aib",tname="time",prec="real")
-
-!     ! Test 2D writing
-!     filename = "rembo.gis.nc"
-!     call ens_init(ens_fldr,fldrs,filename,names=["month","time "],t=time_out,tname=tname,tunits=tunits)
-
-!     call ens_write(ens_fldr,fldrs,filename,"tt",tname="time")
-!     call ens_write(ens_fldr,fldrs,filename,"pp",tname="time")
-
-!     ! Test 3D writing
-!     if (allocated(time_out)) deallocate(time_out)
-!     allocate(time_out(5))
-!     time_out = [1700.d0, 2700.d0, 3700.d0, 4700.d0, 5700.d0]
-
-!     filename = "sico.2d.nc"
-!     call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"],t=time_out,tname=tname,tunits=tunits)
-
-!     call ens_write(ens_fldr,fldrs,filename,"zs",tname="time")
-!     call ens_write(ens_fldr,fldrs,filename,"zb",tname="time")
+    ! Test parameter writing 
+    filename = "options_rembo"
+    call ens_write_par(ens_fldr,fldrs,filename,fmt="options", &
+                       names=["dT_factor","itm_c    ","ppfac    "])
     
-    ! Test static 2D writing
+    ! Test 1D writing
+    filename = "sico.1d.nc"
+    call ens_init(ens_fldr,fldrs,filename,names=["time"],t=time_out,tname=tname,tunits=tunits)
+
+    call ens_write(ens_fldr,fldrs,filename,"Vtot",method="align")
+    call ens_write(ens_fldr,fldrs,filename,"Aib",prec="double")
+
+    ! Test 2D writing
     filename = "rembo.gis.nc"
     call ens_init(ens_fldr,fldrs,filename,names=["month","time "],t=time_out,tname=tname,tunits=tunits)
 
-    call ens_write(ens_fldr,fldrs,filename,"tt")
+    call ens_write(ens_fldr,fldrs,filename,"tt",prec="int")
     call ens_write(ens_fldr,fldrs,filename,"pp")
 
-    ! Test static 3D writing
+    ! Test 3D writing
     filename = "sico.2d.nc"
     call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"], &
         t=time_out,tname=tname,tunits=tunits)

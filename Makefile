@@ -54,6 +54,9 @@ endif
 $(objdir)/nml.o: $(libdir)/nml.f90
 	$(FC) $(DFLAGS) $(FLAGS) -c -o $@ $<
 
+$(objdir)/parameters.o: $(libdir)/parameters.f90
+	$(FC) $(DFLAGS) $(FLAGS) -c -o $@ $<
+
 $(objdir)/ncio.o: $(libdir)/ncio.f90
 	$(FC) $(DFLAGS) $(FLAGS) -c -o $@ $<
 
@@ -86,8 +89,8 @@ $(objdir)/ensembles.o: ensembles.f90
 
 ## Complete programs
 
-ens-rembo: $(objdir)/nml.o $(objdir)/ncio.o $(objdir)/interp1D.o \
-		   $(objdir)/geodesic.o $(objdir)/planet.o \
+ens-rembo: $(objdir)/nml.o $(objdir)/parameters.o $(objdir)/ncio.o \
+		   $(objdir)/interp1D.o $(objdir)/geodesic.o $(objdir)/planet.o \
 	       $(objdir)/projection_oblimap2.o $(objdir)/coordinates.o \
 		   $(objdir)/ensembles.o
 	$(FC) $(DFLAGS) $(FLAGS) -o ens_rembo.x $^ ens_rembo.f90 $(LFLAGS)
