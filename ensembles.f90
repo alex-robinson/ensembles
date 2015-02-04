@@ -350,7 +350,7 @@ contains
                     call nc_read(path_in,name,vin1D,missing_value=mv,start=[1],count=[dims(1)])
 
                     ! Interpolate input data 
-                    vout1D = ens_interp(tin1D,vin1D,tout1D,missing_value=mv,method=method)
+                    vout1D = ens_interp_1D(tin1D,vin1D,tout1D,missing_value=mv,method=method)
 
                     ! Write to ensemble file 
                     select case(trim(precision))
@@ -384,7 +384,7 @@ contains
                                      start=[i,1],count=[1,dims(2)])
 
                         ! Interpolate input data 
-                        vout1D = ens_interp(tin1D,vin1D,tout1D,missing_value=mv,method=method)
+                        vout1D = ens_interp_1D(tin1D,vin1D,tout1D,missing_value=mv,method=method)
 
                         ! Write to ensemble file 
                         select case(trim(precision))
@@ -420,7 +420,7 @@ contains
                                      start=[i,j,1],count=[1,1,dims(3)])
 
                         ! Interpolate input data 
-                        vout1D = ens_interp(tin1D,vin1D,tout1D,missing_value=mv,method="align")
+                        vout1D = ens_interp_1D(tin1D,vin1D,tout1D,missing_value=mv,method="align")
 
                         ! Write to ensemble file 
                         select case(trim(precision))
@@ -526,7 +526,7 @@ contains
 
     end subroutine ens_init
 
-    function ens_interp(x,y,xout,missing_value,method) result(yout)
+    function ens_interp_1D(x,y,xout,missing_value,method) result(yout)
 
         implicit none 
 
@@ -592,7 +592,26 @@ contains
 
         return 
 
-    end function ens_interp 
+    end function ens_interp_1D
+
+    function ens_interp_2D(x,y,xout,missing_value,method) result(yout)
+
+        implicit none 
+
+        double precision :: x(:), y(:,:), xout(:)
+        double precision :: yout(size(y,1),size(xout,1))
+        double precision :: missing_value 
+        character(len=*), optional :: method 
+        integer :: i, nx, k, k0, k1, l0, l1
+
+        ! Loop over other dimensions and call 1D interpolation
+        do i = 1, size(y,1) 
+            yout(i,:) = ens_interp_1D(x,y(i,:),xout,missing_value,method)
+        end do 
+
+        return 
+
+    end function ens_interp_2D
 
     subroutine ens_folders()
 
