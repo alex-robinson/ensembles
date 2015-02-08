@@ -22,6 +22,7 @@ module ensembles
 
     private 
     public :: ens_init, ens_write, ens_write_par
+    public :: ens_folders
 
 contains 
 
@@ -571,9 +572,76 @@ contains
 
     end function ens_interp_3D
 
-    subroutine ens_folders()
+    subroutine ens_folders(fldrs,path)
+        ! Generate an array of simulation folder names given a base path
 
         implicit none 
+
+        character(len=*), allocatable :: fldrs(:)
+        character(len=*) :: path 
+        integer :: k, q, nfldr0, nfldr, iostat
+        logical :: dir_e
+        character(len=512) :: tmpfldrs(10000) 
+
+        if (allocated(fldrs)) deallocate(fldrs)
+
+        ! Check if the base directory exists
+        inquire( file=trim(path)//"/.", exist=dir_e )
+        if ( .not. dir_e ) then
+            write(*,*), "ens_folders:: error: base path cannot be found: "//trim(path)
+            stop 
+        end if 
+
+        ! Either use batch file to load folder names, or
+        ! use system ls command
+        inquire( file=trim(path)//"/batch", exist=dir_e )
+        if ( dir_e ) then
+             open(unit=22,file=trim(path)//"/batch",status='old',action='read')
+             do k = 1, 10000
+                read(22,"(a)",iostat=iostat) tmpfldrs(k) 
+                if (iostat == -1) exit
+             end do 
+             close(22)
+             
+             nfldr0 = k-1 
+             allocate(fldrs(nfldr0))
+             do k = 1, nfldr0
+                 fldrs(k) = trim(tmpfldrs(k))
+             end do 
+
+        else ! Get folder names from system command
+
+            write(*,*) "ens_folders:: To do!"
+            stop 
+
+        end if 
+
+        ! Eliminate white space folders, add path
+        q = 0  
+        do k = 1, nfldr0 
+            if (trim(tmpfldrs(k)) .ne. "") then ! .and. tmpfldrs(1:1) .ne. "#") then 
+                q = q+1 
+                fldrs(q) = trim(path)//"/"//trim(tmpfldrs(k))
+            end if 
+        end do 
+        nfldr = q 
+
+        ! Reallocate fldrs to match those actually found in the file
+        do k = 1, nfldr 
+            tmpfldrs(k) = trim(fldrs(k))
+        end do 
+        deallocate(fldrs)
+        allocate(fldrs(nfldr))
+        do k = 1, nfldr 
+            fldrs(k) = trim(tmpfldrs(k))
+        end do 
+
+        ! Print out folders to be loaded
+        write(*,"(a)") "ens_folders:: folders to be loaded: "
+        do k = 1, nfldr
+            write(*,"(a)") trim(fldrs(k))
+        end do 
+        write(*,*) 
 
         return 
 

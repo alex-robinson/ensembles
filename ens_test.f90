@@ -33,10 +33,6 @@ program ens_rembo
         write(fldrs(k),"(a,i1)") "data/test_sico",k
     end do 
 
-    ! Get folders
-    call ens_folders(fldrs,path="data")
-    stop 
-
     ! Define output times 
     t0 = 1700
     t1 = 1720 
@@ -53,7 +49,7 @@ program ens_rembo
     filename = "options_rembo"
     call ens_write_par(ens_fldr,fldrs,filename,fmt="options", &
                        names=["dT_factor","itm_c    ","ppfac    "])
-
+    
     ! Test 1D writing
     filename = "sico.1d.nc"
     call ens_init(ens_fldr,fldrs,filename,names=["time"],t=time_out,tname=tname,tunits=tunits)
