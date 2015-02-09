@@ -34,6 +34,11 @@ program ens_rembo
     ! 4. Write ensemble files 
     ! =============================================
 
+    ! nml parameters 
+    call ens_write_par(ens_fldr,fldrs,filename="Greenland.nml",fmt="nml", &
+                       names=["yelmo_energy:T0"])
+    stop 
+    
     ! ## Parameters ##
     call ens_write_par(ens_fldr,fldrs,filename="options_rembo",fmt="options", &
                        names=["dT_factor","itm_c    ","ppfac    "])

@@ -35,13 +35,13 @@ contains
 
         implicit none 
 
-        character(len=*), intent(IN) :: ens_fldr, fldrs(:), filename 
-        character(len=*), intent(IN) :: fmt, names(:)
+        character(len=*), intent(IN) :: ens_fldr, fldrs(:), filename, fmt
+        character(len=*) :: names(:)
 
-        character(len=512)  :: filename_out
+        character(len=512)  :: filename_out, groups(size(names))
         character(len=1024) :: path_in, path_out  
         double precision :: values(size(names))
-        integer :: nfldr, nsim, np, q, i 
+        integer :: nfldr, nsim, np, q, i, n 
         integer :: ncid  
 
         ! Check if file format is supported
@@ -62,6 +62,24 @@ contains
         nsim  = nfldr 
         np    = size(names)
 
+        ! Separate out group names if namelist parameters 
+        if (trim(fmt) .eq. "nml") then 
+            do i = 1, np 
+                q = index(names(i),":")
+                if (q .le. 0) then 
+                    write(*,*) "ens_write_par:: error: &
+                        &nml parameters must be given as 'group:name'."
+                    write(*,*) names(i) 
+                    stop 
+                end if 
+                n = len(names)
+                groups(i) = names(i)(1:q-1)
+                names(i)  = names(i)(q+1:n)
+
+                write(*,*) trim(groups(i))//" : "//trim(names(i))
+            end do 
+        end if 
+
         ! Create output file 
         call nc_create(path_out)
         call nc_write_dim(path_out,"sim",x=1,dx=1,nx=nsim)
@@ -80,8 +98,12 @@ contains
                 end do 
 
             else 
-                write(*,*) "To load from nml file..."
-                stop 
+
+                ! Load the parameters of interest from namelist file 
+                do i = 1, np 
+                    call nml_read(path_in,groups(i),names(i),values(i))
+                end do 
+ 
             end if 
 
             ! Define file for current simulation and write
@@ -94,6 +116,7 @@ contains
 !                 write(*,*) "ens_write_par:: ",trim(path_out)," ",trim(names(i))," ",values(i)
                 call nc_write(path_out,names(i),values(i),dim1="sim", &
                               start=[q],count=[1],ncid=ncid)
+                call nc_write_attr(path_out,varname=names(i),name="group",value=groups(i))
             end do 
 
             call nc_close(ncid)
@@ -787,7 +810,7 @@ contains
         tmp = -99999999.d0 
 
         write(*,*) "ensembles:: IMPLEMENT SORT!"
-        stop 
+!         stop 
 
 !         do k = 1,n 
 !             tmp(k) = 
