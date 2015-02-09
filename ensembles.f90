@@ -22,7 +22,7 @@ module ensembles
 
     private 
     public :: ens_init, ens_write, ens_write_par
-    public :: ens_folders
+    public :: ens_folders, ens_times
 
 contains 
 
@@ -91,7 +91,7 @@ contains
             call nc_open(path_out,ncid,writable=.TRUE.)
 
             do i = 1, np 
-                write(*,*) "ens_write_par:: ",trim(path_out)," ",trim(names(i))," ",values(i)
+!                 write(*,*) "ens_write_par:: ",trim(path_out)," ",trim(names(i))," ",values(i)
                 call nc_write(path_out,names(i),values(i),dim1="sim", &
                               start=[q],count=[1],ncid=ncid)
             end do 
@@ -656,5 +656,144 @@ contains
         return 
 
     end subroutine ens_folders
+
+    subroutine ens_times(time,par,times)
+
+        implicit none 
+
+        double precision, allocatable, intent(INOUT) :: time(:)
+        double precision, intent(IN)  :: par(:) 
+        double precision, intent(IN), optional :: times(:)
+        double precision, allocatable :: tmp(:)
+        integer :: n, ntot, nt, q, know, k, jnow  
+        double precision :: pnow(3)
+
+        ! Make sure time vector is not allocated yet
+        if (allocated(time)) deallocate(time)
+
+        ! Make sure input parameters have right length
+        n = size(par)/3 
+        if (mod(size(par),3) /= 0) then 
+            write(*,*) "ens_times:: error: time parameters must be a set of three: "
+            write(*,*) "start_time, end_time, dt"
+            write(*,"(a,30f12.3)") "par: ", par
+            stop 
+        end if 
+
+        ! Determine how long the time vector will be based
+        ! on input parameters
+        ntot = 0 
+        do q = 1, n 
+            pnow = par(1+3*(q-1):3*q)
+            ntot = ntot + (pnow(2)-pnow(1))/pnow(3) + 1
+        end do 
+
+        ! Add room for specific output times too
+        if (present(times)) ntot = ntot + size(times)
+        
+        ! Check to make sure output is not excessive!
+        if ( ntot .gt. 500 ) then
+          write(*,*) "ens_times:: Too much output desired!! Try again."
+          write(*,"(a,i12)")     "ntot: ", ntot
+          write(*,"(a,30f12.3)") " par: ", par
+          stop
+        end if
+
+        ! Allocate time vector
+        allocate(time(ntot))
+
+        ! Add in specific times if available
+        know = 0 
+        if (present(times)) then 
+            nt = size(times)
+            time(1:nt) = times 
+            know = nt
+        end if 
+        
+        ! Loop over each section and generate additional times
+        jnow = 1
+        do q = 1, n 
+            pnow = par(1+3*(q-1):3*q)
+
+            nt = (pnow(2)-pnow(1))/pnow(3) + 1
+            do k = 1, nt 
+                know = know+1
+                time(know) = pnow(1) + pnow(3)*(k-1) 
+            end do 
+        end do 
+
+        ! Eliminate duplicates
+        call unique(time)
+
+        ! Sort the times to make sure they are in the right order
+        call quicksort(time)
+        
+        write(*,*) "Output times:"
+        write(*,"(500f12.2)") time 
+        write(*,*) 
+
+        return 
+
+    end subroutine ens_times 
+
+    subroutine unique(x)
+
+        implicit none 
+
+        double precision, allocatable, intent(INOUT) :: x(:)
+        double precision, allocatable :: tmp(:)
+        integer :: n0, n, k, j  
+        logical :: add 
+        double precision, parameter :: tol = 1d-5
+
+        n0 = size(x)
+        allocate(tmp(n0))
+        tmp = -99999999.d0 
+
+        ! Store original data in temporary array avoiding duplicates 
+        tmp(1) = x(1)
+        n = 1 
+        do k = 2, n0
+            add = .TRUE. 
+            do j = 1, n
+                if (abs(x(k)-tmp(j)) .le. tol) add = .FALSE.
+            end do 
+            if (add) then 
+                n = n+1
+                tmp(n) = x(k)
+            end if 
+        end do 
+
+        ! Reallocate and save data to output array 
+        deallocate(x)
+        allocate(x(n))
+        x = tmp(1:n)
+
+        return 
+
+    end subroutine unique 
+
+    subroutine quicksort(x)
+        ! Custom routine, should use a real sorting algorithm
+
+        implicit none 
+
+        double precision, intent(INOUT) :: x(:)
+        double precision, allocatable :: tmp(:)
+        integer :: n, k, j  
+
+        n = size(x)
+        allocate(tmp(n))
+        tmp = -99999999.d0 
+
+        write(*,*) "ensembles:: IMPLEMENT SORT!"
+        stop 
+
+!         do k = 1,n 
+!             tmp(k) = 
+
+!         return 
+
+    end subroutine quicksort 
 
 end module ensembles 
