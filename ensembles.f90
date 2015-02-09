@@ -592,29 +592,39 @@ contains
             stop 
         end if 
 
-        ! Either use batch file to load folder names, or
-        ! use system ls command
+        ! Either use batch file (copy to batch.txt to be safe)
+        ! or generate batch.txt from directory listing 
         inquire( file=trim(path)//"/batch", exist=dir_e )
         if ( dir_e ) then
-             open(unit=22,file=trim(path)//"/batch",status='old',action='read')
-             do k = 1, 10000
-                read(22,"(a)",iostat=iostat) tmpfldrs(k) 
-                if (iostat == -1) exit
-             end do 
-             close(22)
-             
-             nfldr0 = k-1 
-             allocate(fldrs(nfldr0))
-             do k = 1, nfldr0
-                 fldrs(k) = trim(tmpfldrs(k))
-             end do 
-
-        else ! Get folder names from system command
-
-            write(*,*) "ens_folders:: To do!"
-            stop 
-
+            call system("cp "//trim(path)//"/batch "//trim(path)//"/batch.txt")
+        else
+!             call system("ls -d "//trim(path)//"/*/ > "//trim(path)//"/batch.txt")
+            call system("ls -F "//trim(path)//" | grep / > "//trim(path)//"/batch.txt")
         end if 
+
+
+        ! Load files from batch.txt file 
+        inquire( file=trim(path)//"/batch.txt", exist=dir_e )
+        if ( .not. dir_e ) then 
+            write(*,*) "ens_folders:: error: batch file not found."
+            write(*,*) trim(path)//"/batch.txt"
+            stop
+        end if 
+
+        ! Open batch.txt file and read folders
+        open(unit=22,file=trim(path)//"/batch.txt",status='old',action='read')
+        do k = 1, 10000
+            read(22,"(a)",iostat=iostat) tmpfldrs(k) 
+            if (iostat == -1) exit
+        end do 
+        close(22)
+
+        ! Store filenames in fldrs vector
+        nfldr0 = k-1 
+        allocate(fldrs(nfldr0))
+        do k = 1, nfldr0
+            fldrs(k) = trim(tmpfldrs(k))
+        end do 
 
         ! Eliminate white space folders, add path
         q = 0  
