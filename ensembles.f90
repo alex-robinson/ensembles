@@ -609,7 +609,7 @@ contains
         if (allocated(fldrs)) deallocate(fldrs)
 
         ! Check if the base directory exists
-        system("touch "//trim(path)//"/batch.txt")
+        call system("touch "//trim(path)//"/batch.txt")
         inquire( file=trim(path)//"/batch.txt", exist=dir_e )
         if ( .not. dir_e ) then
             write(*,*), "ens_folders:: error: base path cannot be found: "//trim(path)
