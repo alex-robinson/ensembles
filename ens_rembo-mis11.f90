@@ -55,7 +55,7 @@ program ens_rembo
 !     ! ## SICO 2D (2D+time) ##
     filename = "sico.nc"
     call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"], &
-                  t=time2D,tname=tname,tunits=tunits)
+                  t=time2D,tname=tname,tunits=tunits,static=["lon","lat"])
 
     ! Write fields with integer precision (rounds to the meter) to save space
     call ens_write(ens_fldr,fldrs,filename,"mask",method="align",prec="int")

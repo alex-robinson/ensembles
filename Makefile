@@ -107,6 +107,15 @@ ens-rembo: $(objdir)/nml.o $(objdir)/parameters.o $(objdir)/ncio.o \
 	@echo "    ens_rembo.x is ready."
 	@echo " "
 
+ens-mis11: $(objdir)/nml.o $(objdir)/parameters.o $(objdir)/ncio.o \
+		   $(objdir)/interp1D.o $(objdir)/geodesic.o $(objdir)/planet.o \
+	       $(objdir)/projection_oblimap2.o $(objdir)/coordinates.o \
+		   $(objdir)/ensembles.o
+	$(FC) $(DFLAGS) $(FLAGS) -o ens_mis11.x $^ ens_rembo-mis11.f90 $(LFLAGS)
+	@echo " "
+	@echo "    ens_mis11.x is ready."
+	@echo " "
+
 clean:
 	rm -f *.x $(objdir)/*.o $(objdir)/*.mod
 
