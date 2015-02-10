@@ -45,7 +45,7 @@ program ens_rembo
 !                        names=["Q_GEO_0  ","C_SLIDE_0"])
 
     ! ## SICO 1D (time) ##
-    filename = "sico.nc"
+    filename = "sico.1d.nc"
 !     call ens_init(ens_fldr,fldrs,filename,names=["time"],t=time1D,tname=tname,tunits=tunits)
     call ens_init(ens_fldr,fldrs,filename,names=["time"],t=time1D,tname=tname,tunits=tunits)
 
