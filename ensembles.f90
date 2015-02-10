@@ -116,7 +116,7 @@ contains
 !                 write(*,*) "ens_write_par:: ",trim(path_out)," ",trim(names(i))," ",values(i)
                 call nc_write(path_out,names(i),values(i),dim1="sim", &
                               start=[q],count=[1],ncid=ncid)
-                call nc_write_attr(path_out,varname=names(i),name="group",value=groups(i))
+                if (trim(fmt)=="nml") call nc_write_attr(path_out,varname=names(i),name="group",value=groups(i))
             end do 
 
             call nc_close(ncid)
