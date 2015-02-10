@@ -204,7 +204,7 @@ contains
         end if
 
         write(*,"(a,2x,a,1x,a1,1x,a)") "ens_write:: "//trim(path_out), trim(name), ":", trim(precision)
-        if (allocated(tout)) write(*,*) "** interpolating times **"
+        if (allocated(tout) .and. present(method)) write(*,*) "** interpolating times using: "//trim(method)
         do k = 1, ndim1 
             write(*,"(a12,i6)") names1(k), dims1(k)
         end do 
@@ -421,7 +421,7 @@ contains
 
     end subroutine ens_write
 
-    subroutine ens_init(ens_fldr,fldrs,filename,names,t,tname,tunits)
+    subroutine ens_init(ens_fldr,fldrs,filename,names,t,tname,tunits,static)
 
         ! This subroutine will initialize an ensemble file with the
         ! dimensions `names` + a new dimension 'sim'
@@ -433,12 +433,13 @@ contains
         character(len=*), intent(IN) :: names(:)
         double precision, intent(IN), optional  :: t(:)  
         character(len=32), intent(IN), optional :: tname, tunits
+        character(len=*), intent(IN), optional :: static(:)
 
-        double precision, allocatable :: x(:) 
+        double precision, allocatable :: x(:), v1D(:), v2D(:,:), v3D(:,:,:)
         character(len=512) :: xname, xunits 
         
         character(len=512) :: filename_out, path_out, path_in
-        integer :: q, nsim, ndim, nd, nx 
+        integer :: q, nsim, ndim, nd, nx, nd1, nd2, nd3 
         logical :: unlim 
 
         ! Define output ensemble filename 
@@ -482,6 +483,50 @@ contains
             call nc_write_dim(path_out,xname,x=x,units=xunits,unlimited=unlim)
 
         end do 
+
+        ! Add static variables to ensemble file if desired 
+        if (present(static)) then 
+
+            ! Drop the last dimension in case time is involved
+            if (trim(names(ndim)) .eq. "time") ndim = ndim-1
+            
+            do q = 1, size(static)
+
+                if (allocated(v1D)) deallocate(v1D)
+                if (allocated(v2D)) deallocate(v2D)
+                if (allocated(v3D)) deallocate(v3D)
+
+                select case(ndim)
+                    case(1)
+                        nd1 = nc_size(path_in,names(1))
+                        allocate(v1D(nd1))
+                        call nc_read(path_in,static(q),v1D)
+                        call nc_write(path_out,static(q),v1D,dims=names(1:ndim))
+
+                    case(2)
+                        nd1 = nc_size(path_in,names(1))
+                        nd2 = nc_size(path_in,names(2))
+                        allocate(v2D(nd1,nd2))
+                        call nc_read(path_in,static(q),v2D)
+                        call nc_write(path_out,static(q),v2D,dims=names(1:ndim))
+
+                    case(3)
+                        nd1 = nc_size(path_in,names(1))
+                        nd2 = nc_size(path_in,names(2))
+                        nd3 = nc_size(path_in,names(3))
+                        allocate(v3D(nd1,nd2,nd3))
+                        call nc_read(path_in,static(q),v3D)
+                        call nc_write(path_out,static(q),v3D,dims=names(1:ndim))
+
+                    case DEFAULT 
+                        ! Nothing to do here 
+
+                end select 
+
+                        
+            end do 
+
+        end if 
 
         return 
 

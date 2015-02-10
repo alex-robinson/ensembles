@@ -13,71 +13,70 @@ program ens_rembo
     character(len=512) :: ens_fldr, filename
     character(len=512), allocatable :: fldrs(:) 
     
-    double precision, allocatable :: time1D(:), time2D(:)
+    double precision, allocatable :: time_out(:)
     character(len=256) :: tname, tunits
 
     ! =============================================
     ! 1. Define output folder and get ensemble
     !    input folders 
     ! =============================================
-    ens_fldr = "output/mis11s_m11"
-    call ens_folders(fldrs,path=ens_fldr)
+    ens_fldr = "output"
+    call ens_folders(fldrs,path="data")
 
     ! =============================================
     ! 2. Define custom output times 
     ! =============================================
+    call ens_times(time_out,par=[1700.d0,1720.d0,1.d0])
     tname  = "time"
-    tunits = "years BP"
-    call ens_times(time1D,par=[-550.d3,-430.d3,2.d3, &
-                               -430.d3,-390.d3,0.1d3, &
-                               -390.d3,-350.d3,0.5d3 ] )
-    call ens_times(time2D,par=[-411.d3,-400.d3,0.5d3] )
+    tunits = "ka BP"
 
     ! =============================================
     ! 4. Write ensemble files 
     ! =============================================
 
-!     ! ## Parameters ##
-!     call ens_write_par(ens_fldr,fldrs,filename="options_rembo",fmt="options", &
-!                        names=["dT_factor","itm_c    ","ppfac    "])
+    ! nml parameters 
+!     call ens_write_par(ens_fldr,fldrs,filename="Greenland.nml",fmt="nml", &
+!                        names=["yelmo_energy:T0"])
+!     stop 
+    
+    ! ## Parameters ##
+    call ens_write_par(ens_fldr,fldrs,filename="options_rembo",fmt="options", &
+                       names=["dT_factor","itm_c    ","ppfac    "])
 
-!     ! ## SICO 1D (time) ##
-!     filename = "sico.1d.nc"
-!     call ens_init(ens_fldr,fldrs,filename,names=["time"],t=time1D,tname=tname,tunits=tunits)
+!     call ens_write_par(ens_fldr,fldrs,filename="options_sico",fmt="options", &
+!                        names=["Q_GEO_0  ","C_SLIDE_0"])
 
-!     call ens_write(ens_fldr,fldrs,filename,"Vtot")
-!     call ens_write(ens_fldr,fldrs,filename,"Aib")
-!     call ens_write(ens_fldr,fldrs,filename,"dVdt")
-!     call ens_write(ens_fldr,fldrs,filename,"zs_max")
-!     call ens_write(ens_fldr,fldrs,filename,"z_sle")
-!     call ens_write(ens_fldr,fldrs,filename,"z_sl")
+    ! ## SICO 1D (time) ##
+    filename = "sico.1d.nc"
+!     call ens_init(ens_fldr,fldrs,filename,names=["time"],t=time_out,tname=tname,tunits=tunits)
+    call ens_init(ens_fldr,fldrs,filename,names=["time"])
 
-!     ! ## SICO 2D (2D+time) ##
-    filename = "sico.nc"
+    call ens_write(ens_fldr,fldrs,filename,"Vtot",method="align")
+    call ens_write(ens_fldr,fldrs,filename,"Aib",prec="double")
+
+    ! ## SICO 2D (2D+time) ##
+    filename = "sico.2d.nc"
     call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"], &
-                  t=time2D,tname=tname,tunits=tunits)
+        t=time_out,tname=tname,tunits=tunits,static=["lon","lat"])
 
-    call ens_write(ens_fldr,fldrs,filename,"mask",method="align",prec="int")
-    call ens_write(ens_fldr,fldrs,filename,"zs",  method="align")
-    call ens_write(ens_fldr,fldrs,filename,"zb",  method="align")
-    call ens_write(ens_fldr,fldrs,filename,"H",   method="align")
-    call ens_write(ens_fldr,fldrs,filename,"H_t", method="align")
+    stop 
 
-!     call ens_write(ens_fldr,fldrs,filename,"zb")
+    call ens_write(ens_fldr,fldrs,filename,"zs",method="align")
+    call ens_write(ens_fldr,fldrs,filename,"zb")
 
-!     ! ## REMBO 2D (month+time) ##
-!     filename = "rembo.gis.nc"
-!     call ens_init(ens_fldr,fldrs,filename,names=["month","time "],t=time_out,tname=tname,tunits=tunits)
+    ! ## REMBO 2D (month+time) ##
+    filename = "rembo.gis.nc"
+    call ens_init(ens_fldr,fldrs,filename,names=["month","time "],t=time_out,tname=tname,tunits=tunits)
 
-!     call ens_write(ens_fldr,fldrs,filename,"tt")
-!     call ens_write(ens_fldr,fldrs,filename,"pp")
+    call ens_write(ens_fldr,fldrs,filename,"tt")
+    call ens_write(ens_fldr,fldrs,filename,"pp")
 
-!     ! ## REMBO 3D (2D+time) ##
-!     filename = "clima.nc"
-!     call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"])
+    ! ## REMBO 3D (2D+time) ##
+    filename = "clima.nc"
+    call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"])
 
-!     call ens_write(ens_fldr,fldrs,filename,"tt")
-!     call ens_write(ens_fldr,fldrs,filename,"pp")
+    call ens_write(ens_fldr,fldrs,filename,"tt")
+    call ens_write(ens_fldr,fldrs,filename,"pp")
 
     write(*,*)
     write(*,*) "Ensemble generation completed."
