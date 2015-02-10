@@ -662,6 +662,11 @@ contains
 
         ! Eliminate extra path coordinates, add actual path 
         do k = 1, nfldr
+            ! Remove the last slash if present
+            q = len(trim(fldrs(k)))
+            if (fldrs(k)(q:q)=="/") fldrs(k) = trim(fldrs(k)(1:q-1))
+
+            ! Remove previous directory information if present
             q = index(fldrs(k),"/",back=.TRUE.)
             if (q .gt. 0) fldrs(k) = trim(fldrs(k)(q+1:len(fldrs(k))))
             fldrs(k) = trim(path)//"/"//trim(fldrs(k))
