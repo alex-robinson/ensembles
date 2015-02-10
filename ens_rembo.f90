@@ -20,7 +20,7 @@ program ens_rembo
     ! 1. Define output folder and get ensemble
     !    input folders 
     ! =============================================
-    ens_fldr = "/iplex/01/tumble/robinson/output/mis11s_m11"
+    ens_fldr = "output/mis11s_m11"
     call ens_folders(fldrs,path=ens_fldr)
 
     ! =============================================

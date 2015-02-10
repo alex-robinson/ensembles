@@ -716,7 +716,7 @@ contains
         if (present(times)) ntot = ntot + size(times)
         
         ! Check to make sure output is not excessive!
-        if ( ntot .gt. 500 ) then
+        if ( ntot .gt. 5000 ) then
           write(*,*) "ens_times:: Too much output desired!! Try again."
           write(*,"(a,i12)")     "ntot: ", ntot
           write(*,"(a,30f12.3)") " par: ", par
