@@ -650,15 +650,22 @@ contains
             fldrs(k) = trim(tmpfldrs(k))
         end do 
 
-        ! Eliminate white space folders, add path
+        ! Eliminate white space folders
         q = 0  
         do k = 1, nfldr0 
             if (trim(tmpfldrs(k)) .ne. "") then ! .and. tmpfldrs(1:1) .ne. "#") then 
                 q = q+1 
-                fldrs(q) = trim(path)//"/"//trim(tmpfldrs(k))
+                fldrs(q) = trim(tmpfldrs(k))
             end if 
         end do 
         nfldr = q 
+
+        ! Eliminate extra path coordinates, add actual path 
+        do k = 1, nfldr
+            q = index(fldrs(k),"/",back=.TRUE.)
+            if (q .gt. 0) fldrs(k) = trim(fldrs(k)(q+1:len(fldrs(k))))
+            fldrs(k) = trim(path)//"/"//trim(fldrs(k))
+        end do 
 
         ! Reallocate fldrs to match those actually found in the file
         do k = 1, nfldr 
