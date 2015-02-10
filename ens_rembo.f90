@@ -37,31 +37,32 @@ program ens_rembo
     ! 4. Write ensemble files 
     ! =============================================
 
-    ! ## Parameters ##
-    call ens_write_par(ens_fldr,fldrs,filename="options_rembo",fmt="options", &
-                       names=["dT_factor","itm_c    ","ppfac    "])
+!     ! ## Parameters ##
+!     call ens_write_par(ens_fldr,fldrs,filename="options_rembo",fmt="options", &
+!                        names=["dT_factor","itm_c    ","ppfac    "])
 
-!     call ens_write_par(ens_fldr,fldrs,filename="options_sico",fmt="options", &
-!                        names=["Q_GEO_0  ","C_SLIDE_0"])
-
-    ! ## SICO 1D (time) ##
-    filename = "sico.1d.nc"
+!     ! ## SICO 1D (time) ##
+!     filename = "sico.1d.nc"
 !     call ens_init(ens_fldr,fldrs,filename,names=["time"],t=time1D,tname=tname,tunits=tunits)
-    call ens_init(ens_fldr,fldrs,filename,names=["time"],t=time1D,tname=tname,tunits=tunits)
 
-    call ens_write(ens_fldr,fldrs,filename,"Vtot")
-    call ens_write(ens_fldr,fldrs,filename,"Aib")
-    call ens_write(ens_fldr,fldrs,filename,"dVdt")
-    call ens_write(ens_fldr,fldrs,filename,"zs_max")
-    call ens_write(ens_fldr,fldrs,filename,"z_sle")
-    call ens_write(ens_fldr,fldrs,filename,"z_sl")
+!     call ens_write(ens_fldr,fldrs,filename,"Vtot")
+!     call ens_write(ens_fldr,fldrs,filename,"Aib")
+!     call ens_write(ens_fldr,fldrs,filename,"dVdt")
+!     call ens_write(ens_fldr,fldrs,filename,"zs_max")
+!     call ens_write(ens_fldr,fldrs,filename,"z_sle")
+!     call ens_write(ens_fldr,fldrs,filename,"z_sl")
 
 !     ! ## SICO 2D (2D+time) ##
-!     filename = "sico.2d.nc"
-!     call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"], &
-!                   t=time2D,tname=tname,tunits=tunits)
+    filename = "sico.nc"
+    call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"], &
+                  t=time2D,tname=tname,tunits=tunits)
 
-!     call ens_write(ens_fldr,fldrs,filename,"zs",method="align")
+    call ens_write(ens_fldr,fldrs,filename,"mask",method="align",prec="int")
+    call ens_write(ens_fldr,fldrs,filename,"zs",  method="align")
+    call ens_write(ens_fldr,fldrs,filename,"zb",  method="align")
+    call ens_write(ens_fldr,fldrs,filename,"H",   method="align")
+    call ens_write(ens_fldr,fldrs,filename,"H_t", method="align")
+
 !     call ens_write(ens_fldr,fldrs,filename,"zb")
 
 !     ! ## REMBO 2D (month+time) ##

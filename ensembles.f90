@@ -288,7 +288,7 @@ contains
                             stop 
                     end select 
 
-                    write(*,"(a,a,2x,a,i3)") "ens_write:: 1D field written: ", &
+                    write(*,"(a,a,2x,a,i5)") "ens_write:: 1D field written: ", &
                                              trim(path_out), trim(name), q 
                     
                 end do 
@@ -347,7 +347,7 @@ contains
                             stop 
                     end select 
  
-                    write(*,"(a,a,2x,a,i3)") "ens_write:: 2D field written: ", &
+                    write(*,"(a,a,2x,a,i5)") "ens_write:: 2D field written: ", &
                                              trim(path_out), trim(name), q 
                 end do 
 
@@ -405,7 +405,7 @@ contains
                             stop 
                     end select  
  
-                    write(*,"(a,a,2x,a,i3)") "ens_write:: 3D field written: ", &
+                    write(*,"(a,a,2x,a,i5)") "ens_write:: 3D field written: ", &
                                              trim(path_out), trim(name), q 
 
                 end do 
