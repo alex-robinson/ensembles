@@ -53,31 +53,42 @@ program ens_rembo
 !     call ens_write(ens_fldr,fldrs,filename,"z_sl")
 
 !     ! ## SICO 2D (2D+time) ##
-    filename = "sico.nc"
-    call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"],static=["lon","lat"])
+!     filename = "sico.nc"
+!     call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"],tunits=tunits,static=["lon","lat"])
 
-    ! Write fields with integer precision (rounds to the meter) to save space
+!     ! Write fields with integer precision (rounds to the meter) to save space
+!     call ens_write(ens_fldr,fldrs,filename,"mask",method="align",prec="int")
+!     call ens_write(ens_fldr,fldrs,filename,"zs",  method="align",prec="int")
+!     call ens_write(ens_fldr,fldrs,filename,"zb",  method="align",prec="int")
+!     call ens_write(ens_fldr,fldrs,filename,"H",   method="align",prec="int")
+!     call ens_write(ens_fldr,fldrs,filename,"H_t", method="align",prec="int")
+
+    ! ## REMBO 2D (month+time) ##
+    filename = "rembo.gis.nc"
+    call ens_init(ens_fldr,fldrs,filename,names=["month","time "],t=time1D,tname=tname,tunits=tunits)
+
+    call ens_write(ens_fldr,fldrs,filename,"tt")
+    call ens_write(ens_fldr,fldrs,filename,"tte")
+    call ens_write(ens_fldr,fldrs,filename,"pp")
+    call ens_write(ens_fldr,fldrs,filename,"snow")
+    call ens_write(ens_fldr,fldrs,filename,"runoff")
+    call ens_write(ens_fldr,fldrs,filename,"smb")
+    call ens_write(ens_fldr,fldrs,filename,"dT")
+    call ens_write(ens_fldr,fldrs,filename,"S")
+    call ens_write(ens_fldr,fldrs,filename,"S65")
+    call ens_write(ens_fldr,fldrs,filename,"aco2")
+
+    ! ## REMBO 3D (2D+time) ##
+    filename = "clima.nc"
+    call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"],static=["lon","lat"], &
+                  t=time1D,tname=tname,tunits=tunits)
+
     call ens_write(ens_fldr,fldrs,filename,"mask",method="align",prec="int")
     call ens_write(ens_fldr,fldrs,filename,"zs",  method="align",prec="int")
-    call ens_write(ens_fldr,fldrs,filename,"zb",  method="align",prec="int")
-    call ens_write(ens_fldr,fldrs,filename,"H",   method="align",prec="int")
-    call ens_write(ens_fldr,fldrs,filename,"H_t", method="align",prec="int")
-
-!     call ens_write(ens_fldr,fldrs,filename,"zb")
-
-!     ! ## REMBO 2D (month+time) ##
-!     filename = "rembo.gis.nc"
-!     call ens_init(ens_fldr,fldrs,filename,names=["month","time "],t=time_out,tname=tname,tunits=tunits)
-
-!     call ens_write(ens_fldr,fldrs,filename,"tt")
-!     call ens_write(ens_fldr,fldrs,filename,"pp")
-
-!     ! ## REMBO 3D (2D+time) ##
-!     filename = "clima.nc"
-!     call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"])
-
-!     call ens_write(ens_fldr,fldrs,filename,"tt")
-!     call ens_write(ens_fldr,fldrs,filename,"pp")
+    call ens_write(ens_fldr,fldrs,filename,"tjan",method="align")
+    call ens_write(ens_fldr,fldrs,filename,"tjul",method="align")
+    call ens_write(ens_fldr,fldrs,filename,"pp",  method="align")
+    call ens_write(ens_fldr,fldrs,filename,"pdds",method="align")
 
     write(*,*)
     write(*,*) "Ensemble generation completed."

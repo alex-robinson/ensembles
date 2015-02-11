@@ -475,6 +475,9 @@ contains
                     x = t 
                     xname    = trim(tname)
                     xunits   = trim(tunits)
+                else 
+                    if (present(tname))  xname  = trim(tname)
+                    if (present(tunits)) xunits = trim(tunits)
                 end if 
             end if 
 
