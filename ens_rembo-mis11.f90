@@ -16,6 +16,9 @@ program ens_rembo
     double precision, allocatable :: time1D(:), time2D(:)
     character(len=256) :: tname, tunits
 
+    character(len=256) :: cores(7)
+    integer :: q 
+
     ! =============================================
     ! 1. Define output folder and get ensemble
     !    input folders 
@@ -64,6 +67,35 @@ program ens_rembo
 !     call ens_write(ens_fldr,fldrs,filename,"H",   method="align",prec="int")
 !     call ens_write(ens_fldr,fldrs,filename,"H_t", method="align",prec="int")
 
+!     ! ## SICO CORES (time) ##
+    cores = ["cc     ", "dye3   ", "gisp2  ", "grip   ", "neem   ", "neem_up", "ngrip  "]
+    do q = 1, size(cores)
+
+        filename = "core_"//trim(cores(q))//".nc"
+        call ens_init(ens_fldr,fldrs,filename,names=["depth","time "], &
+                      t=time1D,tname=tname,tunits=tunits)
+
+        call ens_write(ens_fldr,fldrs,filename,"delta_ts")
+        call ens_write(ens_fldr,fldrs,filename,"zs")
+        call ens_write(ens_fldr,fldrs,filename,"H")
+        call ens_write(ens_fldr,fldrs,filename,"temp")
+        call ens_write(ens_fldr,fldrs,filename,"Rb")
+        call ens_write(ens_fldr,fldrs,filename,"tts")
+        call ens_write(ens_fldr,fldrs,filename,"tt")
+        call ens_write(ens_fldr,fldrs,filename,"tdjf")
+        call ens_write(ens_fldr,fldrs,filename,"tjja")
+        call ens_write(ens_fldr,fldrs,filename,"tjan")
+        call ens_write(ens_fldr,fldrs,filename,"tjul")
+        call ens_write(ens_fldr,fldrs,filename,"ttp")
+        call ens_write(ens_fldr,fldrs,filename,"pp")
+        call ens_write(ens_fldr,fldrs,filename,"snow")
+        call ens_write(ens_fldr,fldrs,filename,"Q_bm")
+        call ens_write(ens_fldr,fldrs,filename,"zc")
+        call ens_write(ens_fldr,fldrs,filename,"temp_p")
+        call ens_write(ens_fldr,fldrs,filename,"age_p")
+        
+    end do 
+
 !     ! ## REMBO 2D (month+time) ##
 !     filename = "rembo.gis.nc"
 !     call ens_init(ens_fldr,fldrs,filename,names=["month","time "],t=time1D,tname=tname,tunits=tunits)
@@ -79,17 +111,17 @@ program ens_rembo
 !     call ens_write(ens_fldr,fldrs,filename,"S65")
 !     call ens_write(ens_fldr,fldrs,filename,"aco2")
 
-    ! ## REMBO 3D (2D+time) ##
-    filename = "clima.nc"
-    call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"],static=["lon","lat"], &
-                  t=time2D,tname=tname,tunits=tunits)
+!     ! ## REMBO 3D (2D+time) ##
+!     filename = "clima.nc"
+!     call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"],static=["lon","lat"], &
+!                   t=time2D,tname=tname,tunits=tunits)
 
-    call ens_write(ens_fldr,fldrs,filename,"mask",method="align",prec="int")
-    call ens_write(ens_fldr,fldrs,filename,"zs",  method="align",prec="int")
-    call ens_write(ens_fldr,fldrs,filename,"tjan",method="align")
-    call ens_write(ens_fldr,fldrs,filename,"tjul",method="align")
-    call ens_write(ens_fldr,fldrs,filename,"pp",  method="align")
-    call ens_write(ens_fldr,fldrs,filename,"pdds",method="align")
+!     call ens_write(ens_fldr,fldrs,filename,"mask",method="align",prec="int")
+!     call ens_write(ens_fldr,fldrs,filename,"zs",  method="align",prec="int")
+!     call ens_write(ens_fldr,fldrs,filename,"tjan",method="align")
+!     call ens_write(ens_fldr,fldrs,filename,"tjul",method="align")
+!     call ens_write(ens_fldr,fldrs,filename,"pp",  method="align")
+!     call ens_write(ens_fldr,fldrs,filename,"pdds",method="align")
 
     write(*,*)
     write(*,*) "Ensemble generation completed."
