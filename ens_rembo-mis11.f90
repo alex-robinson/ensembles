@@ -72,7 +72,7 @@ program ens_rembo
     do q = 1, size(cores)
 
         filename = "core_"//trim(cores(q))//".nc"
-        call ens_init(ens_fldr,fldrs,filename,names=["depth","time "], &
+        call ens_init(ens_fldr,fldrs,filename,names=["z","time "], &
                       t=time1D,tname=tname,tunits=tunits)
 
         call ens_write(ens_fldr,fldrs,filename,"delta_ts")
