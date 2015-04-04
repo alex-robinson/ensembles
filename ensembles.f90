@@ -87,6 +87,9 @@ contains
         ! Loop over folders and write variable to ensemble file
         do q = 1, nsim  
 
+            ! Define file for current simulation
+            path_in = trim(fldrs(q))//"/"//trim(filename)
+
             if (trim(fmt) .eq. "options") then 
                 ! Get the parameter choices from the options file,
                 ! and save these values to the global parameter array
@@ -106,13 +109,9 @@ contains
  
             end if 
 
-            ! Define file for current simulation and write
-            ! parameters to it
-            path_in = trim(fldrs(q))//"/"//trim(filename)
-
+            ! Open the output file and write the parameters for this simulation
             call nc_open(path_out,ncid,writable=.TRUE.)
-            call nc_write_attr(path_out,"path_in",trim(path_in))
-
+            
             do i = 1, np 
 !                 write(*,*) "ens_write_par:: ",trim(path_out)," ",trim(names(i))," ",values(i)
                 call nc_write(path_out,names(i),values(i),dim1="sim", &
