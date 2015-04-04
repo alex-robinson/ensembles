@@ -111,6 +111,7 @@ contains
             path_in = trim(fldrs(q))//"/"//trim(filename)
 
             call nc_open(path_out,ncid,writable=.TRUE.)
+            call nc_write_attr(path_out,"path_in",trim(path_in))
 
             do i = 1, np 
 !                 write(*,*) "ens_write_par:: ",trim(path_out)," ",trim(names(i))," ",values(i)
