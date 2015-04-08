@@ -23,7 +23,7 @@ program ens_rembo
     ! 1. Define output folder and get ensemble
     !    input folders 
     ! =============================================
-    ens_fldr = "output/mis11_m11c"
+    ens_fldr = "output/mis11x_m11"
     call ens_folders(fldrs,path=ens_fldr)
 
     ! =============================================
@@ -42,7 +42,8 @@ program ens_rembo
 
     ! ## Parameters ##
     call ens_write_par(ens_fldr,fldrs,filename="options_rembo",fmt="options", &
-                       names=["dT_factor","dT_width ","itm_c    ","ppfac    "])
+                       names=["dT_factor    ","dT_width     ","itm_c        ","ppfac        ", &
+                              "paleo_frac_dT"])
 
     ! ## SICO 1D (time) ##
     filename = "sico.1d.nc"
