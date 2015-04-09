@@ -119,6 +119,13 @@ ens-mis11: $(objdir)/nml.o $(objdir)/parameters.o $(objdir)/ncio.o \
 	@echo "    ens_mis11.x is ready."
 	@echo " "
 
+ens-mis5:  $(objdir)/nml.o $(objdir)/parameters.o $(objdir)/ncio.o \
+		   $(objdir)/ensembles.o
+	$(FC) $(DFLAGS) $(FLAGS) -o ens_mis5.x $^ ens_rembo-mis5.f90 $(LFLAGS)
+	@echo " "
+	@echo "    ens_mis5.x is ready."
+	@echo " "
+
 clean:
 	rm -f *.x $(objdir)/*.o $(objdir)/*.mod
 
