@@ -23,7 +23,7 @@ program ens_rembo
     ! 1. Define output folder and get ensemble
     !    input folders 
     ! =============================================
-    ens_fldr = "output/mis5hol"
+    ens_fldr = "output/mis5hol2"
     call ens_folders(fldrs,path=ens_fldr)
 
     ! =============================================
@@ -33,9 +33,9 @@ program ens_rembo
     tunits = "years BP"
     call ens_times(time1D,par=[-250.d3,-140.d3,2.0d3, &
                                -140.d3,-110.d3,0.1d3, &
-                               -110.d3, -25.d3,2.0d3, &
-                                -25.d3,  12.d3,1.0d3, &
-                                -12.d3,   0.d3,0.1d3 ] )
+                               -110.d3, -25.d3,0.5d3, &
+                                -25.d3,  16.d3,0.2d3, &
+                                -16.d3,   0.d3,0.1d3 ] )
     call ens_times(time2D,par=[ -12.d3,   0.d3,4.0d3], &
             times=[-130d3, -126d3, -124d3, -123.5d3, -123d3, -122.5d3, &
                    -122d3, -121.5d3, -121d3, -120.5d3, -120.d3, -115.d3, -22.d3] )
@@ -105,7 +105,7 @@ program ens_rembo
 
     ! ## REMBO 2D (month+time) ##
     filename = "rembo.gis.nc"
-    call ens_init(ens_fldr,fldrs,filename,names=["month","time "],t=time1D,tname=tname,tunits=tunits)
+    call ens_init(ens_fldr,fldrs,filename,names=["point","month","time "],t=time1D,tname=tname,tunits=tunits)
 
     call ens_write(ens_fldr,fldrs,filename,"tt")
     call ens_write(ens_fldr,fldrs,filename,"tte")
@@ -117,6 +117,10 @@ program ens_rembo
     call ens_write(ens_fldr,fldrs,filename,"S")
     ! call ens_write(ens_fldr,fldrs,filename,"S65")
     call ens_write(ens_fldr,fldrs,filename,"aco2")
+
+    ! Forcing too 
+    call ens_write(ens_fldr,fldrs,filename,"dT_jja")
+!     call ens_write(ens_fldr,fldrs,filename,"dT_amp")
 
     ! ## REMBO 3D (2D+time) ##
     filename = "clima.nc"
