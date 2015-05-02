@@ -34,7 +34,7 @@ program ens_rembo
     call ens_times(time1D,par=[-250.d3,-140.d3,2.0d3, &
                                -140.d3,-110.d3,0.1d3, &
                                -110.d3, -25.d3,0.5d3, &
-                                -25.d3,  16.d3,0.2d3, &
+                                -25.d3, -16.d3,0.2d3, &
                                 -16.d3,   0.d3,0.1d3 ] )
     call ens_times(time2D,par=[ -12.d3,   0.d3,4.0d3], &
             times=[-130d3, -126d3, -124d3, -123.5d3, -123d3, -122.5d3, &
