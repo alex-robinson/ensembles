@@ -23,7 +23,7 @@ program ens_rembo
     ! 1. Define output folder and get ensemble
     !    input folders 
     ! =============================================
-    ens_fldr = "output/mis5hol2"
+    ens_fldr = "output/mis5_gisp2neem"
     call ens_folders(fldrs,path=ens_fldr)
 
     ! =============================================
@@ -38,15 +38,18 @@ program ens_rembo
                                 -16.d3,   0.d3,0.1d3 ] )
     call ens_times(time2D,par=[ -12.d3,   0.d3,4.0d3], &
             times=[-130d3, -126d3, -124d3, -123.5d3, -123d3, -122.5d3, &
-                   -122d3, -121.5d3, -121d3, -120.5d3, -120.d3, -115.d3, -22.d3] )
+                   -122d3, -121.5d3, -121d3, -120.5d3, -120.d3, -115.d3, &
+                   -22.d3] )
 
     ! =============================================
     ! 4. Write ensemble files 
     ! =============================================
 
     ! ## Parameters ##
+!     call ens_write_par(ens_fldr,fldrs,filename="options_rembo",fmt="options", &
+!                        names=["f_eem ","f_glac","f_hol "])
     call ens_write_par(ens_fldr,fldrs,filename="options_rembo",fmt="options", &
-                       names=["f_eem ","f_glac","f_hol "])
+                       names=["dT_factor    ","itm_c        ","ppfac        "])
 
     ! ## SICO 1D (time) ##
     filename = "sico.1d.nc"
