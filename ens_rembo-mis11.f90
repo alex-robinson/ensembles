@@ -111,6 +111,7 @@ program ens_rembo
     call ens_write(ens_fldr,fldrs,filename,"runoff")
     call ens_write(ens_fldr,fldrs,filename,"smb")
     call ens_write(ens_fldr,fldrs,filename,"dT")
+    call ens_write(ens_fldr,fldrs,filename,"dTb")
     call ens_write(ens_fldr,fldrs,filename,"S")
     ! call ens_write(ens_fldr,fldrs,filename,"S65")
     call ens_write(ens_fldr,fldrs,filename,"aco2")
