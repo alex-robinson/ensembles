@@ -23,7 +23,7 @@ program ens_rembo
     ! 1. Define output folder and get ensemble
     !    input folders 
     ! =============================================
-    ens_fldr = "output/mis11x_m11"
+    ens_fldr = "output/mis11z_m11"
     call ens_folders(fldrs,path=ens_fldr)
 
     ! =============================================
