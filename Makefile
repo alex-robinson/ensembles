@@ -71,9 +71,9 @@ else ifeq ($(env),iplex) ## env=iplex
     FLAGS    = -module $(objdir) -L$(objdir) $(INC_COORD) $(INC_NC) 
     LFLAGS   = $(LIB_COORD) $(LIB_NC)
 
-    DFLAGS   = -vec-report0 -O3
+    DFLAGS   = -O3
     ifeq ($(debug), 1)
-        DFLAGS   = -C -g -traceback -ftrapuv -fpe0 -check all -vec-report0
+        DFLAGS   = -C -g -traceback -ftrapuv -fpe0 -check all
     endif
 
 else 
