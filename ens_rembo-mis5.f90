@@ -23,7 +23,8 @@ program ens_rembo
     ! 1. Define output folder and get ensemble
     !    input folders 
     ! =============================================
-    ens_fldr = "output/mis5_gisp2neem"
+!     ens_fldr = "output/mis5_gisp2neem"
+ens_fldr = "output/mis11y_m5"
     call ens_folders(fldrs,path=ens_fldr)
 
     ! =============================================
@@ -49,7 +50,7 @@ program ens_rembo
 !     call ens_write_par(ens_fldr,fldrs,filename="options_rembo",fmt="options", &
 !                        names=["f_eem ","f_glac","f_hol "])
     call ens_write_par(ens_fldr,fldrs,filename="options_rembo",fmt="options", &
-                       names=["dT_factor    ","itm_c        ","ppfac        "])
+                       names=["dT_factor    ","dT_min       ","itm_c        ","ppfac        "])
 
     ! ## SICO 1D (time) ##
     filename = "sico.1d.nc"
@@ -62,8 +63,8 @@ program ens_rembo
     call ens_write(ens_fldr,fldrs,filename,"z_sle")
     call ens_write(ens_fldr,fldrs,filename,"z_sl")
 
-!     call ens_write(ens_fldr,fldrs,filename,"V_south")
-!     call ens_write(ens_fldr,fldrs,filename,"A_south")
+    call ens_write(ens_fldr,fldrs,filename,"V_south")
+    call ens_write(ens_fldr,fldrs,filename,"A_south")
 
     ! ## SICO 2D (2D+time) ##
     filename = "sico.nc"
@@ -117,6 +118,7 @@ program ens_rembo
     call ens_write(ens_fldr,fldrs,filename,"runoff")
     call ens_write(ens_fldr,fldrs,filename,"smb")
     call ens_write(ens_fldr,fldrs,filename,"dT")
+    call ens_write(ens_fldr,fldrs,filename,"dTb")
     call ens_write(ens_fldr,fldrs,filename,"S")
     ! call ens_write(ens_fldr,fldrs,filename,"S65")
     call ens_write(ens_fldr,fldrs,filename,"aco2")
