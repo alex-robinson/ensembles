@@ -24,7 +24,7 @@ program ens_rembo
     !    input folders 
     ! =============================================
 !     ens_fldr = "output/mis5_gisp2neem"
-ens_fldr = "output/mis11y_m5"
+    ens_fldr = "output/mis11y_m5_capron2014"
     call ens_folders(fldrs,path=ens_fldr)
 
     ! =============================================
