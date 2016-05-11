@@ -34,7 +34,7 @@ else ifeq ($(env),eolo) ## env=eolo
     INC_COORD = -I/home/fispalma25/robinson/models/EURICE/coord/.obj
 	LIB_COORD = /home/fispalma25/robinson/models/EURICE/coord/libcoordinates.a
 
-    FLAGS    = -module $(objdir) -L$(objdir) $(INC_NC)
+    FLAGS    = -module $(objdir) -L$(objdir) $(INC_COORD) $(INC_NC)
     LFLAGS   = $(LIB_COORD) $(LIB_NC)
 
     DFLAGS   = -vec-report0 -O2 -fp-model precise
