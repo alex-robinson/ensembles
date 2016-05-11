@@ -30,7 +30,7 @@ program ens_rembo
     nsim = 5 
     allocate(fldrs(nsim))
     do k = 1, nsim 
-        write(fldrs(k),"(a,i1)") "data/test_sico",k
+        write(fldrs(k),"(a,i1)") "data/test_data",k
     end do 
 
     ! Define output times 
@@ -51,11 +51,11 @@ program ens_rembo
                        names=["dT_factor","itm_c    ","ppfac    "])
     
     ! Test 1D writing
-    filename = "sico.1d.nc"
-    call ens_init(ens_fldr,fldrs,filename,names=["time"],t=time_out,tname=tname,tunits=tunits)
+    !filename = "sico.1d.nc"
+    !call ens_init(ens_fldr,fldrs,filename,names=["time"],t=time_out,tname=tname,tunits=tunits)
 
-    call ens_write(ens_fldr,fldrs,filename,"Vtot",method="align")
-    call ens_write(ens_fldr,fldrs,filename,"Aib",prec="double")
+    !call ens_write(ens_fldr,fldrs,filename,"Vtot",method="align")
+    !call ens_write(ens_fldr,fldrs,filename,"Aib",prec="double")
 
     ! Test 2D writing
     filename = "rembo.gis.nc"
@@ -65,12 +65,12 @@ program ens_rembo
     call ens_write(ens_fldr,fldrs,filename,"pp")
 
     ! Test 3D writing
-    filename = "sico.2d.nc"
-    call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"], &
-        t=time_out,tname=tname,tunits=tunits)
+    !filename = "sico.2d.nc"
+    !call ens_init(ens_fldr,fldrs,filename,names=["x   ","y   ","time"], &
+    !    t=time_out,tname=tname,tunits=tunits)
 
-    call ens_write(ens_fldr,fldrs,filename,"zs",method="align")
-    call ens_write(ens_fldr,fldrs,filename,"zb")
+    !call ens_write(ens_fldr,fldrs,filename,"zs",method="align")
+    !call ens_write(ens_fldr,fldrs,filename,"zb")
 
     
 
