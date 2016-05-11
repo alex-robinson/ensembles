@@ -31,10 +31,11 @@ else ifeq ($(env),eolo) ## env=eolo
     FC  = ifort
     INC_NC  = -I/home/fispalma22/work/librairies/netcdflib/include
     LIB_NC  = -L/home/fispalma22/work/librairies/netcdflib/lib -lnetcdf
-    LIB_MKL = -L/opt/intel/mkl/lib/intel64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread
+    INC_COORD = -I/home/fispalma25/robinson/models/EURICE/coord/.obj
+	LIB_COORD = /home/fispalma25/robinson/models/EURICE/coord/libcoordinates.a
 
     FLAGS    = -module $(objdir) -L$(objdir) $(INC_NC)
-    LFLAGS   = $(LIB_NC) $(LIB_MKL)
+    LFLAGS   = $(LIB_COORD) $(LIB_NC)
 
     DFLAGS   = -vec-report0 -O2 -fp-model precise
     ifeq ($(debug), 1)
