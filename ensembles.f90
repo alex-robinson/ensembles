@@ -205,15 +205,12 @@ contains
             allocate(tout(dims1(ndim1)))
             call nc_read(path_out,names1(ndim1),tout,missing_value=mv)
 
-            if (.not. present(method)) then 
-                write(*,*) "ens_write:: error: interpolation method must be given explicitly: &
-                            &spline, linear, align"
-                stop 
-            end if 
         end if
 
         write(*,"(a,2x,a,1x,a1,1x,a)") "ens_write:: "//trim(path_out), trim(name), ":", trim(precision)
-        if (allocated(tout) .and. present(method)) write(*,*) "** interpolating times using: "//trim(method)
+        if (allocated(tout)) write(*,*) "** interpolating times"
+        if (present(method)) write(*,*) "          using: "//trim(method)
+
         do k = 1, ndim1 
             write(*,"(a12,i6)") names1(k), dims1(k)
         end do 
@@ -254,6 +251,10 @@ contains
                     ! Allocate variable
                     if (allocated(vin1D)) deallocate(vin1D)
                     allocate(vin1D(dims(1)))
+
+                    write(*,*) dims 
+                    write(*,*) dims(1)
+                    write(*,*) size(vin1D,1)
 
                     ! Read in variable 
                     call nc_read(path_in,name,vin1D,missing_value=mv)
