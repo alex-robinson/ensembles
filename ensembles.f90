@@ -188,29 +188,7 @@ contains
             dims1(k) = nc_size(path_out,names1(k))
         end do 
 
-        write(*,*) "Checking dims..."
-        write(*,*) "dims: ", dims 
-        write(*,*) dims1(ndim1), dims(ndim)
-
-        ! Check if interpolation is needed 
-        if (dims1(ndim1) .ne. dims(ndim)) then 
-
-            ! Get input times
-            if (allocated(tin)) deallocate(tin)
-            allocate(tin(dims(ndim)))
-            call nc_read(path_in,names(ndim),tin,missing_value=mv)
-
-            ! Get output times 
-            if (allocated(tout)) deallocate(tout)
-            allocate(tout(dims1(ndim1)))
-            call nc_read(path_out,names1(ndim1),tout,missing_value=mv)
-
-        end if
-
         write(*,"(a,2x,a,1x,a1,1x,a)") "ens_write:: "//trim(path_out), trim(name), ":", trim(precision)
-        if (allocated(tout)) write(*,*) "** interpolating times"
-        if (present(method)) write(*,*) "          using: "//trim(method)
-
         do k = 1, ndim1 
             write(*,"(a12,i6)") names1(k), dims1(k)
         end do 
@@ -252,13 +230,26 @@ contains
                     call nc_dims(path_in,name=name,names=names,dims=dims)
                     ndim  = size(dims)
 
+                    ! Check if interpolation is needed 
+                    if (dims1(ndim1) .ne. dims(ndim)) then 
+
+                        ! Get input times
+                        if (allocated(tin)) deallocate(tin)
+                        allocate(tin(dims(ndim)))
+                        call nc_read(path_in,names(ndim),tin,missing_value=mv)
+
+                        ! Get output times 
+                        if (allocated(tout)) deallocate(tout)
+                        allocate(tout(dims1(ndim1)))
+                        call nc_read(path_out,names1(ndim1),tout,missing_value=mv)
+
+                        write(*,*) "** interpolating times"
+                        if (present(method)) write(*,*) "          using: "//trim(method)
+                    end if
+
                     ! Allocate variable
                     if (allocated(vin1D)) deallocate(vin1D)
                     allocate(vin1D(dims(1)))
-
-                    write(*,*) dims 
-                    write(*,*) dims(1)
-                    write(*,*) size(vin1D,1)
 
                     ! Read in variable 
                     call nc_read(path_in,name,vin1D,missing_value=mv)
@@ -318,6 +309,23 @@ contains
                     ! Get input dimensions again (in case they changed)
                     call nc_dims(path_in,name=name,names=names,dims=dims)
                     ndim  = size(dims)
+
+                    ! Check if interpolation is needed 
+                    if (dims1(ndim1) .ne. dims(ndim)) then 
+
+                        ! Get input times
+                        if (allocated(tin)) deallocate(tin)
+                        allocate(tin(dims(ndim)))
+                        call nc_read(path_in,names(ndim),tin,missing_value=mv)
+
+                        ! Get output times 
+                        if (allocated(tout)) deallocate(tout)
+                        allocate(tout(dims1(ndim1)))
+                        call nc_read(path_out,names1(ndim1),tout,missing_value=mv)
+
+                        write(*,*) "** interpolating times"
+                        if (present(method)) write(*,*) "          using: "//trim(method)
+                    end if
 
                     ! Allocate variable
                     if (allocated(vin2D)) deallocate(vin2D)
@@ -380,6 +388,23 @@ contains
                     ! Get input dimensions again (in case they changed)
                     call nc_dims(path_in,name=name,names=names,dims=dims)
                     ndim  = size(dims)
+
+                    ! Check if interpolation is needed 
+                    if (dims1(ndim1) .ne. dims(ndim)) then 
+
+                        ! Get input times
+                        if (allocated(tin)) deallocate(tin)
+                        allocate(tin(dims(ndim)))
+                        call nc_read(path_in,names(ndim),tin,missing_value=mv)
+
+                        ! Get output times 
+                        if (allocated(tout)) deallocate(tout)
+                        allocate(tout(dims1(ndim1)))
+                        call nc_read(path_out,names1(ndim1),tout,missing_value=mv)
+
+                        write(*,*) "** interpolating times"
+                        if (present(method)) write(*,*) "          using: "//trim(method)
+                    end if
 
                     ! Allocate variable
                     if (allocated(vin3D)) deallocate(vin3D)
