@@ -920,11 +920,11 @@ contains
     end subroutine QsortC
 
 subroutine Partition(A, marker)
-  real, intent(in out), dimension(:) :: A
+  double precision, intent(in out), dimension(:) :: A
   integer, intent(out) :: marker
   integer :: i, j
-  real :: temp
-  real :: x      ! pivot point
+  double precision :: temp
+  double precision :: x      ! pivot point
   x = A(1)
   i= 0
   j= size(A) + 1
