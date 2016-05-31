@@ -171,7 +171,7 @@ contains
         if (present(prec)) precision = trim(prec)
 
         interp_txt = " -- interp. times" 
-        if (present(method)) interp_txt = trim(interp_txt)//", ",trim(method)
+        if (present(method)) interp_txt = trim(interp_txt)//", "//trim(method)
 
         ! Determine units 
         if (present(units)) then 
