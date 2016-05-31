@@ -48,17 +48,17 @@ program ens_grisli
     filename = "Grisli15_1D_Global.nc"
     call ens_init(ens_fldr,fldrs,filename,names=["time"],t=time1D,tname=tname,tunits=tunits)
 
-    call ens_write(ens_fldr,fldrs,filename,"isvol")
-    call ens_write(ens_fldr,fldrs,filename,"isvolf")
-    call ens_write(ens_fldr,fldrs,filename,"hmean_")
-    call ens_write(ens_fldr,fldrs,filename,"Hmax_")
-    call ens_write(ens_fldr,fldrs,filename,"idx_at") !,method="linear")
-    call ens_write(ens_fldr,fldrs,filename,"idx_ap") !,method="linear")
-    call ens_write(ens_fldr,fldrs,filename,"idx_ao") !,method="linear")
-    call ens_write(ens_fldr,fldrs,filename,"idx_bt") !,method="linear")
-    call ens_write(ens_fldr,fldrs,filename,"idx_bp") !,method="linear")
-    call ens_write(ens_fldr,fldrs,filename,"idx_bo") !,method="linear")
-    call ens_write(ens_fldr,fldrs,filename,"idx_sl")
+    call ens_write(ens_fldr,fldrs,filename,"isvol",method="linear")
+    call ens_write(ens_fldr,fldrs,filename,"isvolf",method="linear")
+    call ens_write(ens_fldr,fldrs,filename,"hmean_",method="linear")
+    call ens_write(ens_fldr,fldrs,filename,"Hmax_",method="linear")
+    call ens_write(ens_fldr,fldrs,filename,"idx_at",method="linear")
+    call ens_write(ens_fldr,fldrs,filename,"idx_ap",method="linear")
+    call ens_write(ens_fldr,fldrs,filename,"idx_ao",method="linear")
+    call ens_write(ens_fldr,fldrs,filename,"idx_bt",method="linear")
+    call ens_write(ens_fldr,fldrs,filename,"idx_bp",method="linear")
+    call ens_write(ens_fldr,fldrs,filename,"idx_bo",method="linear")
+    call ens_write(ens_fldr,fldrs,filename,"idx_sl",method="linear")
     
     ! ## SICO 2D (2D+time) ##
     filename = "Grisli15_2D.nc"
