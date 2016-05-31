@@ -31,8 +31,8 @@ else ifeq ($(env),eolo) ## env=eolo
     FC  = ifort
     INC_NC  = -I/home/fispalma22/work/librairies/netcdflib/include
     LIB_NC  = -L/home/fispalma22/work/librairies/netcdflib/lib -lnetcdf
-    INC_COORD = -I/home/fispalma25/robinson/models/EURICE/coord/.obj
-	LIB_COORD = /home/fispalma25/robinson/models/EURICE/coord/libcoordinates.a
+    INC_COORD = -I/home/fispalma25/apps/coordinates/.obj
+	LIB_COORD = /home/fispalma25/apps/coordinates/libcoordinates.a
 
     FLAGS    = -module $(objdir) -L$(objdir) $(INC_COORD) $(INC_NC)
     LFLAGS   = $(LIB_COORD) $(LIB_NC)
