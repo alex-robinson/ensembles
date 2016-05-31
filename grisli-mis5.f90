@@ -48,7 +48,7 @@ program ens_grisli
     filename = "Grisli15_1D_Global.nc"
     call ens_init(ens_fldr,fldrs,filename,names=["time"],t=time1D,tname=tname,tunits=tunits)
 
-    call ens_write(ens_fldr,fldrs,filename,"isvol",method="spline")
+    call ens_write(ens_fldr,fldrs,filename,"isvol")
     call ens_write(ens_fldr,fldrs,filename,"isvolf")
     call ens_write(ens_fldr,fldrs,filename,"hmean_")
     call ens_write(ens_fldr,fldrs,filename,"Hmax_")
