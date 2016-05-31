@@ -198,15 +198,18 @@ contains
             ! Get input times
             if (allocated(tin)) deallocate(tin)
             allocate(tin(dims(ndim)))
-            write(*,*) names(ndim)
             call nc_read(path_in,names(ndim),tin,missing_value=mv)
 
             ! Get output times 
             if (allocated(tout)) deallocate(tout)
             allocate(tout(dims1(ndim1)))
-            write(*,*) names1(ndim1)
             call nc_read(path_out,names1(ndim1),tout,missing_value=mv)
 
+            if (.not. present(method)) then 
+                write(*,*) "ens_write:: error: interpolation method must be given explicitly: &
+                            &spline, linear, align"
+                stop 
+            end if 
         end if
 
         write(*,"(a,2x,a,1x,a1,1x,a)") "ens_write:: "//trim(path_out), trim(name), ":", trim(precision)
