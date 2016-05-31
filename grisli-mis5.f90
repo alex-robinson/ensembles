@@ -42,7 +42,7 @@ program ens_grisli
 
     ! ## Parameters ##
     call ens_write_par(ens_fldr,fldrs,filename="grisli_par_Greenland.nml",fmt="nml", &
-                       names=["kappa_grz ","kappa_shlf"])
+                       names=["bmelt_par:kappa_grz ","bmelt_par:kappa_shlf"])
 
     stop 
 

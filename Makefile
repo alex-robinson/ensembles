@@ -147,9 +147,9 @@ ens-mis5:  $(objdir)/nml.o $(objdir)/parameters.o $(objdir)/ncio.o \
 
 grisli-mis5:  $(objdir)/nml.o $(objdir)/parameters.o $(objdir)/ncio.o \
 		   $(objdir)/ensembles.o
-	$(FC) $(DFLAGS) $(FLAGS) -o ens_mis5.x $^ ens_grisli-mis5.f90 $(LFLAGS)
+	$(FC) $(DFLAGS) $(FLAGS) -o grisli-mis5.x $^ grisli-mis5.f90 $(LFLAGS)
 	@echo " "
-	@echo "    ens_grisli-mis5.x is ready."
+	@echo "    grisli-mis5.x is ready."
 	@echo " "
 
 clean:
