@@ -52,12 +52,12 @@ program ens_grisli
     call ens_write(ens_fldr,fldrs,filename,"isvolf")
     call ens_write(ens_fldr,fldrs,filename,"hmean_")
     call ens_write(ens_fldr,fldrs,filename,"Hmax_")
-    call ens_write(ens_fldr,fldrs,filename,"idx_at")
-    call ens_write(ens_fldr,fldrs,filename,"idx_ap")
-    call ens_write(ens_fldr,fldrs,filename,"idx_ao")
-    call ens_write(ens_fldr,fldrs,filename,"idx_bt")
-    call ens_write(ens_fldr,fldrs,filename,"idx_bp")
-    call ens_write(ens_fldr,fldrs,filename,"idx_bo")
+    call ens_write(ens_fldr,fldrs,filename,"idx_at",method="linear")
+    call ens_write(ens_fldr,fldrs,filename,"idx_ap",method="linear")
+    call ens_write(ens_fldr,fldrs,filename,"idx_ao",method="linear")
+    call ens_write(ens_fldr,fldrs,filename,"idx_bt",method="linear")
+    call ens_write(ens_fldr,fldrs,filename,"idx_bp",method="linear")
+    call ens_write(ens_fldr,fldrs,filename,"idx_bo",method="linear")
     call ens_write(ens_fldr,fldrs,filename,"idx_sl")
     
     ! ## SICO 2D (2D+time) ##
