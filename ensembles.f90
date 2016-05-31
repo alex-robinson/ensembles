@@ -157,6 +157,8 @@ contains
         character(len=256) :: tname_in, tname_out 
         integer :: q, i, j, k
 
+        character(len=512) :: interp_txt, txt  
+
         ! Define output ensemble filename 
         filename_out = "ens_"//trim(filename)
         path_out     = trim(ens_fldr)//"/"//trim(filename_out)
@@ -167,6 +169,9 @@ contains
         ! Determine output precision (int,real,double)
         precision = "real"
         if (present(prec)) precision = trim(prec)
+
+        interp_txt = " -- interp. times" 
+        if (present(method)) interp_txt = trim(interp_txt)//", ",trim(method)
 
         ! Determine units 
         if (present(units)) then 
@@ -243,8 +248,9 @@ contains
                         allocate(tout(dims1(ndim1)))
                         call nc_read(path_out,names1(ndim1),tout,missing_value=mv)
 
-                        write(*,*) "** interpolating times"
-                        if (present(method)) write(*,*) "          using: "//trim(method)
+                        txt = trim(interp_txt)
+                    else 
+                        txt = ""
                     end if
 
                     ! Allocate variable
@@ -293,8 +299,8 @@ contains
                             stop 
                     end select 
 
-                    write(*,"(a,a,2x,a,i5)") "ens_write:: 1D field written: ", &
-                                             trim(path_out), trim(name), q 
+                    write(*,"(a,a,2x,a,i5,1x,a)") "ens_write:: 1D field written: ", &
+                                             trim(path_out), trim(name), q, trim(txt) 
                     
                 end do 
 
@@ -323,8 +329,9 @@ contains
                         allocate(tout(dims1(ndim1)))
                         call nc_read(path_out,names1(ndim1),tout,missing_value=mv)
 
-                        write(*,*) "** interpolating times"
-                        if (present(method)) write(*,*) "          using: "//trim(method)
+                        txt = trim(interp_txt)
+                    else 
+                        txt = ""
                     end if
 
                     ! Allocate variable
@@ -373,8 +380,8 @@ contains
                             stop 
                     end select 
  
-                    write(*,"(a,a,2x,a,i5)") "ens_write:: 2D field written: ", &
-                                             trim(path_out), trim(name), q 
+                    write(*,"(a,a,2x,a,i5,1x,a)") "ens_write:: 2D field written: ", &
+                                             trim(path_out), trim(name), q, trim(txt) 
                 end do 
 
             case(3)
@@ -402,8 +409,9 @@ contains
                         allocate(tout(dims1(ndim1)))
                         call nc_read(path_out,names1(ndim1),tout,missing_value=mv)
 
-                        write(*,*) "** interpolating times"
-                        if (present(method)) write(*,*) "          using: "//trim(method)
+                        txt = trim(interp_txt)
+                    else 
+                        txt = ""
                     end if
 
                     ! Allocate variable
@@ -452,8 +460,8 @@ contains
                             stop 
                     end select  
  
-                    write(*,"(a,a,2x,a,i5)") "ens_write:: 3D field written: ", &
-                                             trim(path_out), trim(name), q 
+                    write(*,"(a,a,2x,a,i5,1x,a)") "ens_write:: 3D field written: ", &
+                                             trim(path_out), trim(name), q, trim(txt) 
 
                 end do 
 
