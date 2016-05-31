@@ -248,7 +248,7 @@ contains
                     ! Define file for current simulation 
                     path_in = trim(fldrs(q))//"/"//trim(filename)
 
-                    ! Get dimensions again (in case they changed)
+                    ! Get input dimensions again (in case they changed)
                     call nc_dims(path_in,name=name,names=names,dims=dims)
                     ndim  = size(dims)
 
@@ -315,6 +315,10 @@ contains
                     ! Define file for current simulation 
                     path_in = trim(fldrs(q))//"/"//trim(filename)
 
+                    ! Get input dimensions again (in case they changed)
+                    call nc_dims(path_in,name=name,names=names,dims=dims)
+                    ndim  = size(dims)
+
                     ! Allocate variable
                     if (allocated(vin2D)) deallocate(vin2D)
                     allocate(vin2D(dims(1),dims(2)))
@@ -372,6 +376,10 @@ contains
 
                     ! Define file for current simulation 
                     path_in = trim(fldrs(q))//"/"//trim(filename)
+
+                    ! Get input dimensions again (in case they changed)
+                    call nc_dims(path_in,name=name,names=names,dims=dims)
+                    ndim  = size(dims)
 
                     ! Allocate variable
                     if (allocated(vin3D)) deallocate(vin3D)
@@ -826,7 +834,7 @@ contains
         ! Sort the times to make sure they are in the right order
 !         call quicksort(time)
         call QsortC(time)
-        
+
         write(*,*) "Output times:"
         write(*,"(500f12.2)") time 
         write(*,*) 
