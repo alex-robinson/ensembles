@@ -188,17 +188,23 @@ contains
             dims1(k) = nc_size(path_out,names1(k))
         end do 
 
+        write(*,*) "Checking dims..."
+        write(*,*) "dims: ", dims 
+        write(*,*) dims1(ndim1), dims(ndim)
+
         ! Check if interpolation is needed 
         if (dims1(ndim1) .ne. dims(ndim)) then 
 
             ! Get input times
             if (allocated(tin)) deallocate(tin)
             allocate(tin(dims(ndim)))
+            write(*,*) names(ndim)
             call nc_read(path_in,names(ndim),tin,missing_value=mv)
 
             ! Get output times 
             if (allocated(tout)) deallocate(tout)
             allocate(tout(dims1(ndim1)))
+            write(*,*) names1(ndim1)
             call nc_read(path_out,names1(ndim1),tout,missing_value=mv)
 
         end if
