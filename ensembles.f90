@@ -248,6 +248,10 @@ contains
                     ! Define file for current simulation 
                     path_in = trim(fldrs(q))//"/"//trim(filename)
 
+                    ! Get dimensions again (in case they changed)
+                    call nc_dims(path_in,name=name,names=names,dims=dims)
+                    ndim  = size(dims)
+
                     ! Allocate variable
                     if (allocated(vin1D)) deallocate(vin1D)
                     allocate(vin1D(dims(1)))
