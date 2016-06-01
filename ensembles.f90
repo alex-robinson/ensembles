@@ -610,6 +610,9 @@ contains
         ! Length of original series
         nx = size(x) 
 
+        ! Eliminate redundant index (GRISLI bug writing two 0 time values)
+        if (x(nx) .eq. (x(nx-1)) nx = nx-1 
+
         ! Check for starting and ending indices of non-missing data 
         ! (assumes a contiguous datasets!!)
         do k = 1, nx
@@ -636,6 +639,7 @@ contains
         
         if (l1-l0 .le. 1) then 
             write(*,*) "ens_interp:: error: problem with time indices."
+            write(*,*) xout, x(k0), x(k1), k0, k1, l0, l1
             stop 
         end if 
         
