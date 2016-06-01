@@ -60,26 +60,26 @@ program ens_grisli
     call ens_write(ens_fldr,fldrs,filename,"idx_bo",method="linear")
     call ens_write(ens_fldr,fldrs,filename,"idx_sl",method="linear")
     
-!     ! ## GRISLI 2D ##
-!     filename = "Grisli15_2D.nc"
-!     call ens_init(ens_fldr,fldrs,filename,names=["xc  ","yc  ","time"],static=["lon","lat"], &
-!                   t=time2D,tname=tname,tunits=tunits)
+    ! ## GRISLI 2D ##
+    filename = "Grisli15_2D.nc"
+    call ens_init(ens_fldr,fldrs,filename,names=["xc  ","yc  ","time"],static=["lon","lat"], &
+                  t=time2D,tname=tname,tunits=tunits)
 
-!     ! Write fields with integer precision (rounds to the meter) to save space
-!     call ens_write(ens_fldr,fldrs,filename,"S",     method="align",prec="int")
-!     call ens_write(ens_fldr,fldrs,filename,"H",     method="align",prec="int")
-!     call ens_write(ens_fldr,fldrs,filename,"Bsoc",  method="align",prec="int")
-!     call ens_write(ens_fldr,fldrs,filename,"smb",   method="align",prec="real")
-!     call ens_write(ens_fldr,fldrs,filename,"Bmelt", method="align",prec="real")
-!     call ens_write(ens_fldr,fldrs,filename,"dTshlf",method="align",prec="real")
-!     call ens_write(ens_fldr,fldrs,filename,"kappa", method="align",prec="real")
-!     call ens_write(ens_fldr,fldrs,filename,"Tjja",  method="align",prec="real")
-!     call ens_write(ens_fldr,fldrs,filename,"Tb0",   method="align",prec="real")
-!     call ens_write(ens_fldr,fldrs,filename,"Hwat",  method="align",prec="real")
-!     call ens_write(ens_fldr,fldrs,filename,"U",     method="align",prec="real")
-!     call ens_write(ens_fldr,fldrs,filename,"Ub",    method="align",prec="real")
-!     call ens_write(ens_fldr,fldrs,filename,"posx",  method="align",prec="int")
-!     call ens_write(ens_fldr,fldrs,filename,"posy",  method="align",prec="int")
+    ! Write fields with integer precision (rounds to the meter) to save space
+    call ens_write(ens_fldr,fldrs,filename,"S",     method="align",prec="int")
+    call ens_write(ens_fldr,fldrs,filename,"H",     method="align",prec="int")
+    call ens_write(ens_fldr,fldrs,filename,"Bsoc",  method="align",prec="int")
+    call ens_write(ens_fldr,fldrs,filename,"smb",   method="align",prec="real")
+    call ens_write(ens_fldr,fldrs,filename,"Bmelt", method="align",prec="real")
+    call ens_write(ens_fldr,fldrs,filename,"dTshlf",method="align",prec="real")
+    call ens_write(ens_fldr,fldrs,filename,"kappa", method="align",prec="real")
+    call ens_write(ens_fldr,fldrs,filename,"Tjja",  method="align",prec="real")
+    call ens_write(ens_fldr,fldrs,filename,"Tb0",   method="align",prec="real")
+    call ens_write(ens_fldr,fldrs,filename,"Hwat",  method="align",prec="real")
+    call ens_write(ens_fldr,fldrs,filename,"U",     method="align",prec="real")
+    call ens_write(ens_fldr,fldrs,filename,"Ub",    method="align",prec="real")
+    call ens_write(ens_fldr,fldrs,filename,"posx",  method="align",prec="int")
+    call ens_write(ens_fldr,fldrs,filename,"posy",  method="align",prec="int")
 
     write(*,*)
     write(*,*) "Ensemble generation completed."
