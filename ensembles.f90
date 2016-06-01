@@ -637,27 +637,29 @@ contains
         l0 = minloc(abs(xout-x(k0)),dim=1)
         l1 = minloc(abs(xout-x(k1)),dim=1)
         
-        if (l1-l0 .le. 1) then 
-            write(*,*) "ens_interp:: error: problem with time indices."
-            write(*,*) xout, x(k0), x(k1), k0, k1, l0, l1
-            stop 
-        end if 
-        
         ! Apply missing values to output vector and then interpolate as desired
         yout = missing_value
 
-        select case(trim(interp_method))
-            case("spline")
-                yout(l0:l1) = interp_spline(x(k0:k1),y(k0:k1),xout=xout(l0:l1)) 
-            case("linear")
-                yout(l0:l1) = interp_linear(x(k0:k1),y(k0:k1),xout=xout(l0:l1)) 
-            case("align")
-                yout(l0:l1) = interp_align(x(k0:k1),y(k0:k1),xout=xout(l0:l1)) 
-            case DEFAULT 
-                write(*,*) "ens_interp:: error: interpolation method must be one of: spline, linear, align."
-                stop 
-        end select
+        if (l1-l0 .le. 1) then
+            write(*,*) "ens_interp:: warning: simulation has no points to interpolate in range."
+            write(*,*) "interp range: ", minval(xout), maxval(xout)
+            write(*,*) "sim range:    ", x(k0), x(k1)
 
+        else 
+            select case(trim(interp_method))
+                case("spline")
+                    yout(l0:l1) = interp_spline(x(k0:k1),y(k0:k1),xout=xout(l0:l1)) 
+                case("linear")
+                    yout(l0:l1) = interp_linear(x(k0:k1),y(k0:k1),xout=xout(l0:l1)) 
+                case("align")
+                    yout(l0:l1) = interp_align(x(k0:k1),y(k0:k1),xout=xout(l0:l1)) 
+                case DEFAULT 
+                    write(*,*) "ens_interp:: error: interpolation method must be one of: spline, linear, align."
+                    stop 
+            end select
+
+        end if 
+        
         return 
 
     end function ens_interp_1D
