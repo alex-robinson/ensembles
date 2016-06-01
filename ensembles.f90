@@ -611,7 +611,7 @@ contains
         nx = size(x) 
 
         ! Eliminate redundant index (GRISLI bug writing two 0 time values)
-        if (x(nx) .eq. (x(nx-1)) nx = nx-1 
+        if (x(nx) .eq. x(nx-1)) nx = nx-1 
 
         ! Check for starting and ending indices of non-missing data 
         ! (assumes a contiguous datasets!!)
