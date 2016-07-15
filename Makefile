@@ -11,18 +11,19 @@ debug ?= 0
 
 ifeq ($(env),manto) ## env=manto
 
-    ## IFORT OPTIONS ##
-    FC  = ifort
-    INC_NC  = -I/home/jalvarez/work/librairies/netcdflib/include
-    LIB_NC  = -L/home/jalvarez/work/librairies/netcdflib/lib -lnetcdf
-    LIB_MKL = -L/opt/intel/mkl/lib/intel64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread
+    ## GFORTRAN OPTIONS ##
+    FC  = gfortran
+    INC_NC  = -I/usr/include
+    LIB_NC  = -L/usr/lib -lnetcdff -lnetcdf
+    INC_COORD = -I/home/robinson/models/EURICE/coordinates/.obj
+    LIB_COORD = /home/robinson/models/EURICE/coordinates/libcoordinates.a
 
-    FLAGS    = -module $(objdir) -L$(objdir) $(INC_NC)
-    LFLAGS   = $(LIB_NC) $(LIB_MKL)
+    FLAGS  = -I$(objdir) -J$(objdir) $(INC_COORD) $(INC_NC) 
+    LFLAGS = $(LIB_COORD) $(LIB_NC)
 
-    DFLAGS   = -vec-report0 -O2 -fp-model precise -i_dynamic 
-    ifeq ($(debug), 1)
-        DFLAGS   = -C -traceback -ftrapuv -fpe0 -check all -vec-report0 -fp-model precise -i_dynamic 
+    DFLAGS = -O3
+    ifeq ($(debug), 1)  # ,underflow
+        DFLAGS   = -w -g -p -ggdb -ffpe-trap=invalid,zero,overflow -fbacktrace -fcheck=all
     endif
 
 else ifeq ($(env),eolo) ## env=eolo
