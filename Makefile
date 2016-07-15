@@ -153,6 +153,13 @@ grisli-mis5:  $(objdir)/nml.o $(objdir)/parameters.o $(objdir)/ncio.o \
 	@echo "    grisli-mis5.x is ready."
 	@echo " "
 
+grisli-hyst:  $(objdir)/nml.o $(objdir)/parameters.o $(objdir)/ncio.o \
+		   $(objdir)/ensembles.o
+	$(FC) $(DFLAGS) $(FLAGS) -o grisli-hyst.x $^ grisli-hyst.f90 $(LFLAGS)
+	@echo " "
+	@echo "    grisli-hyst.x is ready."
+	@echo " "
+
 clean:
 	rm -f *.x $(objdir)/*.o $(objdir)/*.mod
 
