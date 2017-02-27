@@ -45,7 +45,7 @@ program ens_grisli
     ! =============================================
 
     ! ## Parameters ##
-    call ens_write_par(ens_fldr,fldrs,filename="grisli_par_Antarctica.nml",fmt="nml", &
+    call ens_write_par(ens_fldr,fldrs,filename="grisli_Antarctica.nml",fmt="nml", &
         names=[ "bmelt_par:kappa_shlf ", &
                 "litho_par:tau        ", &
                 "bdrag_par:cf_stream  ", &
