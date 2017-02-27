@@ -49,8 +49,8 @@ else ifeq ($(env),airaki) ## env=airaki
     FC  = gfortran
     INC_NC  = -I/opt/local/include
     LIB_NC  = -L/opt/local/lib -lnetcdff -lnetcdf
-    INC_COORD = -I/Users/robinson/models/EURICE/coord/.obj
-	LIB_COORD = /Users/robinson/models/EURICE/coord/libcoordinates.a
+    INC_COORD = -I/Users/robinson/models/EURICE/coordinates/.obj
+	LIB_COORD = /Users/robinson/models/EURICE/coordinates/libcoordinates.a
 
     FLAGS  = -I$(objdir) -J$(objdir) $(INC_COORD) $(INC_NC) 
     LFLAGS = $(LIB_COORD) $(LIB_NC)
@@ -151,6 +151,13 @@ grisli-mis5:  $(objdir)/nml.o $(objdir)/parameters.o $(objdir)/ncio.o \
 	$(FC) $(DFLAGS) $(FLAGS) -o grisli-mis5.x $^ grisli-mis5.f90 $(LFLAGS)
 	@echo " "
 	@echo "    grisli-mis5.x is ready."
+	@echo " "
+
+grisli-paleo:  $(objdir)/nml.o $(objdir)/parameters.o $(objdir)/ncio.o \
+		   $(objdir)/ensembles.o
+	$(FC) $(DFLAGS) $(FLAGS) -o grisli-paleo.x $^ grisli-paleo.f90 $(LFLAGS)
+	@echo " "
+	@echo "    grisli-paleo.x is ready."
 	@echo " "
 
 grisli-hyst:  $(objdir)/nml.o $(objdir)/parameters.o $(objdir)/ncio.o \
