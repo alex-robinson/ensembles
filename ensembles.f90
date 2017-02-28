@@ -644,6 +644,8 @@ contains
             write(*,*) "ens_interp:: warning: simulation has no points to interpolate in range."
             write(*,*) "interp range: ", minval(xout), maxval(xout)
             write(*,*) "sim range:    ", x(k0), x(k1)
+            write(*,*) "Indices: l0,l1: ", l0, l1 
+            write(*,*) "xout(l0), xout(l1) : ", xout(l0), xout(l1)
 
         else 
             select case(trim(interp_method))
