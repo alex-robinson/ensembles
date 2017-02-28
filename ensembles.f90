@@ -850,10 +850,18 @@ contains
         
         ! Check to make sure output is not excessive!
         if ( ntot .gt. 5000 ) then
-          write(*,*) "ens_times:: Too much output desired!! Try again."
-          write(*,"(a,i12)")     "ntot: ", ntot
-          write(*,"(a,30f12.3)") " par: ", par
-          stop
+            write(*,*) "ens_times:: Too much output desired!! Try again."
+            write(*,"(a,i12)")     "ntot: ", ntot
+            write(*,"(a,30f12.3)") " par: ", par
+            stop
+        end if
+
+        if ( ntot .eq. 0 ) then 
+            write(*,*) "ens_times:: No output times returned for the current parameters!! Try again."
+            write(*,*) "ens_times:: Too much output desired!! Try again."
+            write(*,"(a,i12)")     "ntot: ", ntot
+            write(*,"(a,30f12.3)") " par: ", par
+            stop
         end if
 
         ! Allocate time vector
