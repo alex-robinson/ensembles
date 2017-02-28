@@ -610,8 +610,8 @@ contains
         ! Length of original series
         nx = size(x) 
 
-        ! Eliminate redundant index (GRISLI bug writing two 0 time values)
-        if (x(nx) .eq. x(nx-1)) nx = nx-1 
+!         ! Eliminate redundant index (GRISLI bug writing two 0 time values)
+!         if (x(nx) .eq. x(nx-1)) nx = nx-1 
 
         ! Check for starting and ending indices of non-missing data 
         ! (assumes a contiguous datasets!!)
@@ -625,11 +625,11 @@ contains
             if (y(k1) .ne. missing_value) exit 
         end do 
 
-        if (k1-k0 .le. 1) then 
+        if (k1-k0 .lt. 1) then 
             write(*,*) "ens_interp:: error: not enough data points are available."
             write(*,*) "Range x:    ", minval(x,mask=x .ne. missing_value), &
                                        maxval(x,mask=x .ne. missing_value)
-            write(*,*) "Range xout: ", minval(xout), maxval(x)                                           
+            write(*,*) "Range xout: ", minval(xout), maxval(xout)                                           
             stop 
         end if 
 
@@ -640,12 +640,11 @@ contains
         ! Apply missing values to output vector and then interpolate as desired
         yout = missing_value
 
-        if (l1-l0 .le. 1) then
+        if (l1-l0 .lt. 1) then
             write(*,*) "ens_interp:: warning: simulation has no points to interpolate in range."
             write(*,*) "interp range: ", minval(xout), maxval(xout)
             write(*,*) "sim range:    ", x(k0), x(k1)
             write(*,*) "Indices: l0,l1: ", l0, l1 
-            write(*,*) "xout(l0), xout(l1) : ", xout(l0), xout(l1)
 
         else 
             select case(trim(interp_method))
