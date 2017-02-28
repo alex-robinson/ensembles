@@ -721,7 +721,7 @@ contains
         call system("touch "//trim(path)//"/batch.txt")
         inquire( file=trim(path)//"/batch.txt", exist=dir_e )
         if ( .not. dir_e ) then
-            write(*,*), "ens_folders:: error: base path cannot be found: "//trim(path)
+            write(*,*) "ens_folders:: error: base path cannot be found: "//trim(path)
             stop 
         end if 
 
@@ -807,33 +807,45 @@ contains
         implicit none 
 
         double precision, allocatable, intent(INOUT) :: time(:)
-        double precision, intent(IN)  :: par(:) 
+        double precision, intent(IN), optional :: par(:) 
         double precision, intent(IN), optional :: times(:)
         double precision, allocatable :: tmp(:)
-        integer :: n, ntot, nt, q, know, k, jnow  
+        integer :: n, ntot, ntot_par, nt, q, know, k, jnow  
         double precision :: pnow(3)
 
         ! Make sure time vector is not allocated yet
         if (allocated(time)) deallocate(time)
 
-        ! Make sure input parameters have right length
-        n = size(par)/3 
-        if (mod(size(par),3) /= 0) then 
-            write(*,*) "ens_times:: error: time parameters must be a set of three: "
-            write(*,*) "start_time, end_time, dt"
-            write(*,"(a,30f12.3)") "par: ", par
-            stop 
+        if (present(par)) then 
+            ! Generate times via parameter options
+
+            ! Make sure input parameters have right length
+            n = size(par)/3 
+            if (mod(size(par),3) /= 0) then 
+                write(*,*) "ens_times:: error: time parameters must be a set of three: "
+                write(*,*) "start_time, end_time, dt"
+                write(*,"(a,30f12.3)") "par: ", par
+                stop 
+            end if 
+
+            ! Determine how long the time vector will be based
+            ! on input parameters
+            ntot_par = 0 
+            do q = 1, n 
+                pnow = par(1+3*(q-1):3*q)
+                ntot = ntot + (pnow(2)-pnow(1))/pnow(3) + 1
+            end do 
+
+        else 
+            ! No times from par 
+
+            ntot_par = 0 
+
         end if 
 
-        ! Determine how long the time vector will be based
-        ! on input parameters
-        ntot = 0 
-        do q = 1, n 
-            pnow = par(1+3*(q-1):3*q)
-            ntot = ntot + (pnow(2)-pnow(1))/pnow(3) + 1
-        end do 
-
         ! Add room for specific output times too
+        ntot = 0 
+        if (present(par))   ntot = ntot + ntot_par 
         if (present(times)) ntot = ntot + size(times)
         
         ! Check to make sure output is not excessive!
@@ -855,17 +867,20 @@ contains
             know = nt
         end if 
         
-        ! Loop over each section and generate additional times
-        jnow = 1
-        do q = 1, n 
-            pnow = par(1+3*(q-1):3*q)
+        if (present(par)) then 
+            ! Loop over each section and generate additional times
+            jnow = 1
+            do q = 1, n 
+                pnow = par(1+3*(q-1):3*q)
 
-            nt = (pnow(2)-pnow(1))/pnow(3) + 1
-            do k = 1, nt 
-                know = know+1
-                time(know) = pnow(1) + pnow(3)*(k-1) 
+                nt = (pnow(2)-pnow(1))/pnow(3) + 1
+                do k = 1, nt 
+                    know = know+1
+                    time(know) = pnow(1) + pnow(3)*(k-1) 
+                end do 
             end do 
-        end do 
+
+        end if 
 
         ! Eliminate duplicates
         call unique(time)

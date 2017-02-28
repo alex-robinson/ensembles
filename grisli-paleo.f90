@@ -27,7 +27,7 @@ program ens_grisli
     ! 2. Define custom output times 
     ! =============================================
     tname  = "time"
-    tunits = "years BP"
+    tunits = "years"
 !     call ens_times(time1D,par=[-250.d3,-140.d3,2.0d3, &
 !                                -140.d3,-110.d3,0.1d3, &
 !                                -110.d3, -25.d3,0.5d3, &
@@ -40,7 +40,7 @@ program ens_grisli
 !     call ens_times(time2D,par=[-440.d3,-400.d3,20.0d3],times=[-439.d3,-430.d3] )
 
     call ens_times(time1D,par=[0.d3,50.d3,1.0d2] )
-    call ens_times(time2D,par=[0.d3,50.d3,50.0d3])
+    call ens_times(time2D,times=[0.d3,50.d3])
 
     ! =============================================
     ! 4. Write ensemble files 
