@@ -833,7 +833,7 @@ contains
             ntot_par = 0 
             do q = 1, n 
                 pnow = par(1+3*(q-1):3*q)
-                ntot = ntot + (pnow(2)-pnow(1))/pnow(3) + 1
+                ntot_par = ntot_par + (pnow(2)-pnow(1))/pnow(3) + 1
             end do 
 
         else 
