@@ -20,7 +20,7 @@ program ens_grisli
     ! 1. Define output folder and get ensemble
     !    input folders 
     ! =============================================
-    ens_fldr = "grisli-ucm/output/antnewbmelt-ssatuning-hi"
+    ens_fldr = "grisli-ucm/output/ant-streams"
     call ens_folders(fldrs,path=ens_fldr)
 
     ! =============================================
@@ -36,8 +36,11 @@ program ens_grisli
 !     call ens_times(time2D,par=[-130.d3,-118.d3,2.0d3], &
 !             times=[-22.d3,-16.d3,-12.d3,-8.d3,-4.d3,0.d3] )
     
-    call ens_times(time1D,par=[-440.d3,-400.d3,1.0d2] )
-    call ens_times(time2D,par=[-440.d3,-400.d3,20.0d3],times=[-439.d3,-430.d3] )
+!     call ens_times(time1D,par=[-440.d3,-400.d3,1.0d2] )
+!     call ens_times(time2D,par=[-440.d3,-400.d3,20.0d3],times=[-439.d3,-430.d3] )
+
+    call ens_times(time1D,par=[0.d3,50.d3,1.0d2] )
+    call ens_times(time2D,par=[0.d3,50.d3,50.0d3])
 
     ! =============================================
     ! 4. Write ensemble files 
