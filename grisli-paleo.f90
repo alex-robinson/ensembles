@@ -85,7 +85,7 @@ program ens_grisli
     call ens_write(ens_fldr,fldrs,filename,"Tjja",  method="align",prec="real")
     call ens_write(ens_fldr,fldrs,filename,"Tb0",   method="align",prec="real")
     call ens_write(ens_fldr,fldrs,filename,"U",     method="align",prec="real")
-    call ens_write(ens_fldr,fldrs,filename,"Ub",    method="align",prec="real")
+    call ens_write(ens_fldr,fldrs,filename,"Ub_tot",method="align",prec="real")
     call ens_write(ens_fldr,fldrs,filename,"f_vbvs",method="align",prec="real")
     call ens_write(ens_fldr,fldrs,filename,"f_ssa", method="align",prec="real")
     call ens_write(ens_fldr,fldrs,filename,"beta",  method="align",prec="real")
