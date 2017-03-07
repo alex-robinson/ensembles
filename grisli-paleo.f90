@@ -20,7 +20,7 @@ program ens_grisli
     ! 1. Define output folder and get ensemble
     !    input folders 
     ! =============================================
-    ens_fldr = "grisli-ucm/output/ant-streams"
+    ens_fldr = "grisli-ucm/output/ant-ec906a2-streams"
     call ens_folders(fldrs,path=ens_fldr)
 
     ! =============================================
@@ -84,8 +84,8 @@ program ens_grisli
     call ens_write(ens_fldr,fldrs,filename,"dTshlf",method="align",prec="real")
     call ens_write(ens_fldr,fldrs,filename,"Tjja",  method="align",prec="real")
     call ens_write(ens_fldr,fldrs,filename,"Tb0",   method="align",prec="real")
-    call ens_write(ens_fldr,fldrs,filename,"U",     method="align",prec="real")
-    call ens_write(ens_fldr,fldrs,filename,"Ub_tot",method="align",prec="real")
+    call ens_write(ens_fldr,fldrs,filename,"u",     method="align",prec="real")
+    call ens_write(ens_fldr,fldrs,filename,"ub",    method="align",prec="real")
     call ens_write(ens_fldr,fldrs,filename,"f_vbvs",method="align",prec="real")
     call ens_write(ens_fldr,fldrs,filename,"f_ssa", method="align",prec="real")
     call ens_write(ens_fldr,fldrs,filename,"beta",  method="align",prec="real")
