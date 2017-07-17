@@ -185,12 +185,7 @@ contains
         ! Get dim names and lengths in input file
         call nc_dims(path_in,name=name,names=names,dims=dims)
         ndim  = size(dims)
-
-        write(*,*) "debugging..."
-        write(*,*) "ndim =  ", ndim, size(dims), size(names)
-        write(*,*) "dims =  ", dims 
-        write(*,*) "names = ", names
-
+        
         ! Get dim names and lengths in output file
         ndim1 = ndim+1 
         allocate(names1(ndim1),dims1(ndim1))

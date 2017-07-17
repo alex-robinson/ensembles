@@ -1158,12 +1158,7 @@ contains
             allocate(names(ndims))
             names = names0
         end if
-
-        write(*,*) "ncio: size(names0) = ", size(names0) 
-        write(*,*) "ncio: names0 = ", names0 
-        write(*,*) "ncio: size(names) = ", size(names) 
-        write(*,*) "ncio: names = ", names 
-
+        
         deallocate(names0, dims0, dimids)
 
         return
