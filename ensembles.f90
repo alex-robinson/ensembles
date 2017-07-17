@@ -193,7 +193,11 @@ contains
         ndim1 = ndim+1 
         allocate(names1(ndim1),dims1(ndim1))
         names1(1)       = "sim"
-        names1(2:ndim1) = names 
+
+        do k = 2, ndim1 
+            names1(k) = names(k-1)
+        end do 
+!         names1(2:ndim1) = names 
         do k = 1, ndim1
             dims1(k) = nc_size(path_out,names1(k))
         end do 
