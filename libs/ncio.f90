@@ -1160,6 +1160,9 @@ contains
         write(*,*) "ncio: names0 = ", names0 
         write(*,*) "ncio: size(names) = ", size(names) 
         write(*,*) "ncio: names = ", names 
+        names = names0 
+        write(*,*) "ncio: names = ", names 
+        
 
         deallocate(names0, dims0, dimids)
 
