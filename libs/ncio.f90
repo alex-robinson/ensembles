@@ -1118,8 +1118,8 @@ contains
         implicit none
 
         character (len=*),  intent(IN)  :: filename, name
-        character (len=*), allocatable, intent(INOUT), optional :: names(:)
-        integer, allocatable, intent(INOUT), optional :: dims(:)
+        character (len=*), pointer, intent(INOUT), optional :: names(:)
+        integer,           pointer, intent(INOUT), optional :: dims(:)
 
         character (len=64), allocatable :: names0(:)
         integer, allocatable :: dimids(:), dims0(:)
@@ -1146,12 +1146,15 @@ contains
 
         ! Check what optional arguments were provided and assign as necessary
         if (present(dims)) then
-          if (allocated(dims)) deallocate(dims)
+!           if (allocated(dims)) deallocate(dims)
+          nullify(dims)
           allocate(dims(ndims))
+
           dims = dims0
         end if
         if (present(names)) then
-            if (allocated(names)) deallocate(names)
+!             if (allocated(names)) deallocate(names)
+            nullify(names)
             allocate(names(ndims))
             names = names0
         end if

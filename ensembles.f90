@@ -146,8 +146,9 @@ contains
         character(len=1024) :: path_in, path_out  
         
         character(len=32), allocatable :: names1(:)
-        character(len=32), allocatable :: names(:)
-        integer, allocatable :: dims(:), dims1(:)
+        character(len=32), pointer :: names(:)
+        integer, pointer :: dims(:)
+        integer, allocatable :: dims1(:)
         integer, allocatable :: start(:), count(:)
 
         integer :: nfldr, nsim, ndim, ndim1
@@ -186,16 +187,14 @@ contains
         ndim  = size(dims)
 
         write(*,*) "debugging..."
-        write(*,*) "ndim = ", ndim, size(dims), size(names)
-        write(*,*) "dims = ", dims 
-        write(*,*) "names is allocated? ", allocated(names)
+        write(*,*) "ndim =  ", ndim, size(dims), size(names)
+        write(*,*) "dims =  ", dims 
         write(*,*) "names = ", names
 
         ! Get dim names and lengths in output file
         ndim1 = ndim+1 
         allocate(names1(ndim1),dims1(ndim1))
         names1(1)       = "sim"
-
         names1(2:ndim1) = names 
         do k = 1, ndim1
             dims1(k) = nc_size(path_out,names1(k))
