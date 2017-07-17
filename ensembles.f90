@@ -188,7 +188,7 @@ contains
         write(*,*) "debugging..."
         write(*,*) "ndim = ", ndim, size(dims), size(names)
         write(*,*) "dims = ", dims 
-        write(*,*) "names is allocated? ", associated(names)
+        write(*,*) "names is allocated? ", allocated(names)
         write(*,*) "names = ", names
 
         ! Get dim names and lengths in output file
