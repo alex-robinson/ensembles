@@ -146,7 +146,7 @@ contains
         character(len=1024) :: path_in, path_out  
         
         character(len=32), allocatable :: names1(:)
-        character(len=32), pointer :: names(:)
+        character(len=32), allocatable :: names(:)
         integer, allocatable :: dims(:), dims1(:)
         integer, allocatable :: start(:), count(:)
 
