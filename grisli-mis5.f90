@@ -20,7 +20,7 @@ program ens_grisli
     ! 1. Define output folder and get ensemble
     !    input folders 
     ! =============================================
-    ens_fldr = "GRISLI/output/iso-tau"
+    ens_fldr = "GRISLI/output/iso-ilaria/iso"
     call ens_folders(fldrs,path=ens_fldr)
 
     ! =============================================
@@ -33,7 +33,7 @@ program ens_grisli
                                -110.d3, -25.d3,0.5d3, &
                                 -25.d3, -16.d3,0.2d3, &
                                 -16.d3,   0.d3,0.1d3 ] )
-    call ens_times(time2D,par=[-130.d3,-118.d3,2.0d3], &
+    call ens_times(time2D,par=[-130.d3,-116.d3,2.0d3], &
             times=[-22.d3,-16.d3,-12.d3,-8.d3,-4.d3,0.d3] )
 
     ! =============================================
@@ -72,14 +72,13 @@ program ens_grisli
     call ens_write(ens_fldr,fldrs,filename,"smb",   method="align",prec="real")
     call ens_write(ens_fldr,fldrs,filename,"Bmelt", method="align",prec="real")
     call ens_write(ens_fldr,fldrs,filename,"dTshlf",method="align",prec="real")
-    call ens_write(ens_fldr,fldrs,filename,"kappa", method="align",prec="real")
     call ens_write(ens_fldr,fldrs,filename,"Tjja",  method="align",prec="real")
     call ens_write(ens_fldr,fldrs,filename,"Tb0",   method="align",prec="real")
-    call ens_write(ens_fldr,fldrs,filename,"Hwat",  method="align",prec="real")
-    call ens_write(ens_fldr,fldrs,filename,"U",     method="align",prec="real")
-    call ens_write(ens_fldr,fldrs,filename,"Ub",    method="align",prec="real")
-    call ens_write(ens_fldr,fldrs,filename,"posx",  method="align",prec="int")
-    call ens_write(ens_fldr,fldrs,filename,"posy",  method="align",prec="int")
+    call ens_write(ens_fldr,fldrs,filename,"H_water",  method="align",prec="real")
+    call ens_write(ens_fldr,fldrs,filename,"U",        method="align",prec="real")
+    call ens_write(ens_fldr,fldrs,filename,"Ub_tot",   method="align",prec="real")
+    call ens_write(ens_fldr,fldrs,filename,"mask_bed", method="align",prec="int")
+    call ens_write(ens_fldr,fldrs,filename,"mask_border", method="align",prec="int")
 
     write(*,*)
     write(*,*) "Ensemble generation completed."
