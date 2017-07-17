@@ -20,7 +20,7 @@ program ens_grisli
     ! 1. Define output folder and get ensemble
     !    input folders 
     ! =============================================
-    ens_fldr = "GRISLI/output/iso-ilaria/iso"
+    ens_fldr = "grisli-ucm/output/iso-ilaria/iso"
     call ens_folders(fldrs,path=ens_fldr)
 
     ! =============================================
