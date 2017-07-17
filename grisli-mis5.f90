@@ -41,8 +41,8 @@ program ens_grisli
     ! =============================================
 
     ! ## Parameters ##
-    call ens_write_par(ens_fldr,fldrs,filename="grisli_par_Greenland.nml",fmt="nml", &
-        names=["bmelt_par:kappa_grz ","bmelt_par:kappa_shlf","litho_par:tau       "])
+    call ens_write_par(ens_fldr,fldrs,filename="grisli_Greenland.nml",fmt="nml", &
+        names=["bmelt_par:kappa_grz ","isos_par:tau       "])
 
     ! ## GRISLI 1D ##
     filename = "Grisli15_1D_Global.nc"
@@ -50,18 +50,18 @@ program ens_grisli
 
     call ens_write(ens_fldr,fldrs,filename,"isvol",method="linear")
     call ens_write(ens_fldr,fldrs,filename,"isvolf",method="linear")
-    call ens_write(ens_fldr,fldrs,filename,"hmean_",method="linear")
-    call ens_write(ens_fldr,fldrs,filename,"Hmax_",method="linear")
+!     call ens_write(ens_fldr,fldrs,filename,"hmean_",method="linear")
+!     call ens_write(ens_fldr,fldrs,filename,"Hmax_",method="linear")
     call ens_write(ens_fldr,fldrs,filename,"idx_at",method="linear")
     call ens_write(ens_fldr,fldrs,filename,"idx_ap",method="linear")
     call ens_write(ens_fldr,fldrs,filename,"idx_ao",method="linear")
-    call ens_write(ens_fldr,fldrs,filename,"idx_bt",method="linear")
-    call ens_write(ens_fldr,fldrs,filename,"idx_bp",method="linear")
-    call ens_write(ens_fldr,fldrs,filename,"idx_bo",method="linear")
+!     call ens_write(ens_fldr,fldrs,filename,"idx_bt",method="linear")
+!     call ens_write(ens_fldr,fldrs,filename,"idx_bp",method="linear")
+!     call ens_write(ens_fldr,fldrs,filename,"idx_bo",method="linear")
     call ens_write(ens_fldr,fldrs,filename,"idx_sl",method="linear")
     
     ! ## GRISLI 2D ##
-    filename = "Grisli15_2D.nc"
+    filename = "Grisli2D.nc"
     call ens_init(ens_fldr,fldrs,filename,names=["xc  ","yc  ","time"],static=["lon","lat"], &
                   t=time2D,tname=tname,tunits=tunits)
 
