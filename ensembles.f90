@@ -188,7 +188,7 @@ contains
         write(*,*) "ndim = ", ndim, size(dims), size(names)
         write(*,*) "dims = ", dims 
         write(*,*) "names is allocated? ", allocated(names)
-        write(*,*) "names = ", names 
+        write(*,*) "names = ", names(1)
 
         ! Get dim names and lengths in output file
         ndim1 = ndim+1 
