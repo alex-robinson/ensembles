@@ -42,7 +42,7 @@ program ens_grisli
 
     ! ## Parameters ##
     call ens_write_par(ens_fldr,fldrs,filename="grisli_Greenland.nml",fmt="nml", &
-        names=["bmelt_par:kappa_grz ","isos_par:tau       "])
+        names=["bmelt_par:kappa_grz ","isos_par:tau        "])
 
     ! ## GRISLI 1D ##
     filename = "grisli1D.nc"
