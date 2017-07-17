@@ -188,17 +188,14 @@ contains
         write(*,*) "ndim = ", ndim, size(dims), size(names)
         write(*,*) "dims = ", dims 
         write(*,*) "names is allocated? ", allocated(names)
-        write(*,*) "names = ", names(1)
+        write(*,*) "names = ", names
 
         ! Get dim names and lengths in output file
         ndim1 = ndim+1 
         allocate(names1(ndim1),dims1(ndim1))
         names1(1)       = "sim"
 
-        do k = 2, ndim1 
-            names1(k) = names(k-1)
-        end do 
-!         names1(2:ndim1) = names 
+        names1(2:ndim1) = names 
         do k = 1, ndim1
             dims1(k) = nc_size(path_out,names1(k))
         end do 

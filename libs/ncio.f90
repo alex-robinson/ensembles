@@ -1158,6 +1158,9 @@ contains
 
         deallocate(names0, dims0, dimids)
 
+        write(*,*) "ncio: size(names) = ", size(names) 
+        write(*,*) "ncio: names = ", names 
+
         return
 
     end subroutine nc_dims
