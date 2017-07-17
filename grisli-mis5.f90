@@ -77,7 +77,7 @@ program ens_grisli
     call ens_write(ens_fldr,fldrs,filename,"H_water",  method="align",prec="real")
     call ens_write(ens_fldr,fldrs,filename,"U",        method="align",prec="real")
     call ens_write(ens_fldr,fldrs,filename,"Ub_tot",   method="align",prec="real")
-!     call ens_write(ens_fldr,fldrs,filename,"mask_bed", method="align",prec="int")
+    call ens_write(ens_fldr,fldrs,filename,"mask_bed", method="align",prec="int")
 !     call ens_write(ens_fldr,fldrs,filename,"mask_border", method="align",prec="int")
 
     write(*,*)
