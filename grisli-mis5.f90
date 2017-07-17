@@ -45,7 +45,7 @@ program ens_grisli
         names=["bmelt_par:kappa_grz ","isos_par:tau       "])
 
     ! ## GRISLI 1D ##
-    filename = "Grisli1D.nc"
+    filename = "grisli1D.nc"
     call ens_init(ens_fldr,fldrs,filename,names=["time"],t=time1D,tname=tname,tunits=tunits)
 
     call ens_write(ens_fldr,fldrs,filename,"isvol",method="linear")
@@ -61,7 +61,7 @@ program ens_grisli
     call ens_write(ens_fldr,fldrs,filename,"idx_sl",method="linear")
     
     ! ## GRISLI 2D ##
-    filename = "Grisli2D.nc"
+    filename = "grisli2D.nc"
     call ens_init(ens_fldr,fldrs,filename,names=["xc  ","yc  ","time"],static=["lon","lat"], &
                   t=time2D,tname=tname,tunits=tunits)
 
