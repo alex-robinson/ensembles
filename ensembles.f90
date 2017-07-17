@@ -145,7 +145,8 @@ contains
         character(len=512)  :: filename_out
         character(len=1024) :: path_in, path_out  
         
-        character(len=32), allocatable :: names(:), names1(:)
+        character(len=32), allocatable :: names1(:)
+        character(len=32), pointer :: names(:)
         integer, allocatable :: dims(:), dims1(:)
         integer, allocatable :: start(:), count(:)
 
@@ -187,7 +188,7 @@ contains
         write(*,*) "debugging..."
         write(*,*) "ndim = ", ndim, size(dims), size(names)
         write(*,*) "dims = ", dims 
-        write(*,*) "names is allocated? ", allocated(names)
+        write(*,*) "names is allocated? ", associated(names)
         write(*,*) "names = ", names
 
         ! Get dim names and lengths in output file

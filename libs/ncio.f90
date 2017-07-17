@@ -1118,7 +1118,7 @@ contains
         implicit none
 
         character (len=*),  intent(IN)  :: filename, name
-        character (len=*), allocatable, intent(OUT), optional :: names(:)
+        character (len=*), intent(OUT), optional, pointer :: names(:)
         integer, allocatable, intent(OUT), optional :: dims(:)
 
         character (len=64), allocatable :: names0(:)
@@ -1151,7 +1151,7 @@ contains
           dims = dims0
         end if
         if (present(names)) then
-            if (allocated(names)) deallocate(names)
+            if (associated(names)) deallocate(names)
             allocate(names(ndims))
             names = names0
         end if
