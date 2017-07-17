@@ -45,7 +45,7 @@ program ens_grisli
         names=["bmelt_par:kappa_grz ","isos_par:tau       "])
 
     ! ## GRISLI 1D ##
-    filename = "Grisli15_1D_Global.nc"
+    filename = "Grisli1D.nc"
     call ens_init(ens_fldr,fldrs,filename,names=["time"],t=time1D,tname=tname,tunits=tunits)
 
     call ens_write(ens_fldr,fldrs,filename,"isvol",method="linear")
