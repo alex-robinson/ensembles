@@ -34,9 +34,9 @@ program ens_grisli
                                -110.d3, -25.d3,0.5d3, &
                                 -25.d3, -16.d3,0.2d3, &
                                 -16.d3,   0.d3,0.1d3 ] )
-    call ens_times(time2D,par=[-132.d3,-124.d3,0.1d3]) !, &
+    call ens_times(time2D,par=[-132.d3,-120.d3,0.1d3], &
 !             times=[-22.d3,-16.d3,-12.d3,-8.d3,-4.d3,0.d3] )
-!            times=[0.d3] )
+            times=[0.d3] )
 
     ! =============================================
     ! 4. Write ensemble files 
