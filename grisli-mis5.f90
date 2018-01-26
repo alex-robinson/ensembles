@@ -21,7 +21,7 @@ program ens_grisli
     !    input folders 
     ! =============================================
     !ens_fldr = "grisli-ucm/output/iso-ilaria/iso-500yr"
-    ens_fldr = "grisli-ucm/output/iso-ilaria-1/standard/"
+    ens_fldr = "grisli-ucm/output/iso-ilaria-1/itm/"
     call ens_folders(fldrs,path=ens_fldr)
 
     ! =============================================
