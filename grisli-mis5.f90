@@ -21,7 +21,7 @@ program ens_grisli
     !    input folders 
     ! =============================================
     !ens_fldr = "grisli-ucm/output/iso-ilaria/iso-500yr"
-    ens_fldr = "grisli-ucm/output/iso-ilaria-1/pdd/"
+    ens_fldr = "grisli-ucm/output/iso-ilaria-1/pdd_scale_eem/"
     call ens_folders(fldrs,path=ens_fldr)
 
     ! =============================================
@@ -45,7 +45,7 @@ program ens_grisli
 
     ! ## Parameters ##
     call ens_write_par(ens_fldr,fldrs,filename="grisli_Greenland.nml",fmt="nml", &
-        names=["bmelt_par:kappa_grz ","isos_par:tau        "])
+        names=["bmelt_par:kappa_grz ","isos_par:tau        ","clim_forcing:f_eem  "])
 
     ! ## GRISLI 1D ##
     filename = "grisli1D.nc"
