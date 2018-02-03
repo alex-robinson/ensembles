@@ -739,11 +739,11 @@ contains
         read(22,"(a)",iostat=iostat) str_check 
         close(22)
         q = index(str_check,"No such file or directory")    
-        if ( q .le. 0 ) then
+        if ( q .gt. 0 ) then
             write(*,*) "ens_folders:: error: base path cannot be found: "//trim(path)
             stop 
         end if 
-        
+
         ! Either use batch file (copy to batch.txt to be safe)
         ! or generate batch.txt from directory listing 
         inquire( file=trim(path)//"/batch", exist=dir_e )
