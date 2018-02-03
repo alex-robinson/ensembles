@@ -707,48 +707,64 @@ contains
 
     end function ens_interp_3D
 
-    subroutine ens_folders(fldrs,path)
+    subroutine ens_folders(fldrs,path,path_out)
         ! Generate an array of simulation folder names given a base path
 
         implicit none 
 
-        character(len=*), allocatable :: fldrs(:)
-        character(len=*) :: path 
+        character(len=*), allocatable, intent(OUT) :: fldrs(:)
+        character(len=*), intent(IN) :: path 
+        character(len=*), intent(IN), optional :: path_out
         integer :: k, q, nfldr0, nfldr, iostat
         logical :: dir_e
         character(len=512) :: tmpfldrs(10000) 
+        character(len=1028) :: path1, str_check
+
+        path1 = trim(path)
+        if (present(path_out)) path1 = trim(path_out) 
 
         if (allocated(fldrs)) deallocate(fldrs)
 
+!         ! Check if the base directory exists
+!         call system("touch "//trim(path)//"/batch.txt")
+!         inquire( file=trim(path)//"/batch.txt", exist=dir_e )
+!         if ( .not. dir_e ) then
+!             write(*,*) "ens_folders:: error: base path cannot be found: "//trim(path)
+!             stop 
+!         end if 
+
         ! Check if the base directory exists
-        call system("touch "//trim(path)//"/batch.txt")
-        inquire( file=trim(path)//"/batch.txt", exist=dir_e )
-        if ( .not. dir_e ) then
+        call system("ls "//trim(path)//" > "//trim(path1)//"/batch.txt")
+        open(unit=22,file=trim(path1)//"/batch.txt",status='old',action='read')
+        read(22,"(a)",iostat=iostat) str_check 
+        close(22)
+        q = index(str_check,"No such file or directory")    
+        if ( q .le. 0 ) then
             write(*,*) "ens_folders:: error: base path cannot be found: "//trim(path)
             stop 
         end if 
-
+        
         ! Either use batch file (copy to batch.txt to be safe)
         ! or generate batch.txt from directory listing 
         inquire( file=trim(path)//"/batch", exist=dir_e )
         if ( dir_e ) then
-            call system("cp "//trim(path)//"/batch "//trim(path)//"/batch.txt")
+            call system("cp "//trim(path)//"/batch "//trim(path1)//"/batch.txt")
         else
 !             call system("ls -d "//trim(path)//"/*/ > "//trim(path)//"/batch.txt")
-            call system("ls -F "//trim(path)//" | grep / > "//trim(path)//"/batch.txt")
+            call system("ls -F "//trim(path)//" | grep / > "//trim(path1)//"/batch.txt")
         end if 
 
 
         ! Load files from batch.txt file 
-        inquire( file=trim(path)//"/batch.txt", exist=dir_e )
+        inquire( file=trim(path1)//"/batch.txt", exist=dir_e )
         if ( .not. dir_e ) then 
             write(*,*) "ens_folders:: error: batch file not found."
-            write(*,*) trim(path)//"/batch.txt"
+            write(*,*) trim(path1)//"/batch.txt"
             stop
         end if 
 
         ! Open batch.txt file and read folders
-        open(unit=22,file=trim(path)//"/batch.txt",status='old',action='read')
+        open(unit=22,file=trim(path1)//"/batch.txt",status='old',action='read')
         do k = 1, 10000
             read(22,"(a)",iostat=iostat) tmpfldrs(k) 
             if (iostat == -1) exit
