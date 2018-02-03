@@ -22,7 +22,7 @@ program ens_grisli
     !    input folders 
     ! =============================================
 
-    ens_fldr     = "grisli-ucm-itabone/output/v0.32/iso/new/ens1/"
+    ens_fldr     = "/home/itabone/grisli-ucm/output/v0.32/iso/new/ens1/"
     ens_fldr_out = "grisli-ucm/output/iso-ilaria-1/ens1/"
 
     call ens_folders(fldrs,path=ens_fldr,path_out=ens_fldr_out)
