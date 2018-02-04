@@ -17,13 +17,36 @@ program ens_grisli
     double precision, allocatable :: time1D(:), time2D(:)
     character(len=256) :: tname, tunits
 
+    integer :: narg 
+
     ! =============================================
     ! 1. Define output folder and get ensemble
     !    input folders 
     ! =============================================
 
-    ens_fldr     = "/home/itabone/grisli-ucm/output/v0.32/iso/new/ens1/"
-    ens_fldr_out = "grisli-ucm/output/iso-ilaria-1/ens1/"
+    narg = command_argument_count()
+    if (narg .gt. 0) then 
+        write(*,*) "Load ensemble folders from command line arguments ..."
+        CALL get_command_argument(1,ens_fldr)
+
+        if (narg .eq. 2) then 
+            CALL get_command_argument(2,ens_fldr_out)
+        else 
+            ens_fldr_out = ens_fldr 
+        end if 
+
+    else 
+        ! Hard coded folders 
+        
+        ens_fldr     = "/home/itabone/grisli-ucm/output/v0.32/iso/new/ens1/"
+        ens_fldr_out = "grisli-ucm/output/iso-ilaria-1/ens1/"
+
+    end if 
+
+    write(*,*) "ens_fldr:     "//trim(ens_fldr)
+    write(*,*) "ens_fldr_out: "//trim(ens_fldr_out)
+    
+    stop
 
     call ens_folders(fldrs,path=ens_fldr,path_out=ens_fldr_out)
 
@@ -36,7 +59,7 @@ program ens_grisli
                                -140.d3,-110.d3,0.1d3, &
                                -110.d3, -25.d3,0.5d3, &
                                 -25.d3, -16.d3,0.2d3, &
-                                -16.d3,   0.d3,0.1d3 ] )
+                                -16.d3,   0.d3,0.2d3 ] )
     call ens_times(time2D,par=[-132.d3,-129.d3,0.2d3, &
                                -129.d3,-122.d3,0.1d3, &
                                -122.d3,-118.d3,0.2d3], &
