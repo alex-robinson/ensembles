@@ -37,16 +37,14 @@ program ens_grisli
 
     else 
         ! Hard coded folders 
-        
+
         ens_fldr     = "/home/itabone/grisli-ucm/output/v0.32/iso/new/ens1/"
         ens_fldr_out = "grisli-ucm/output/iso-ilaria-1/ens1/"
 
     end if 
 
     write(*,*) "ens_fldr:     "//trim(ens_fldr)
-    write(*,*) "ens_fldr_out: "//trim(ens_fldr_out)
-    
-    stop
+    write(*,*) "ens_fldr_out: "//trim(ens_fldr_out) 
 
     call ens_folders(fldrs,path=ens_fldr,path_out=ens_fldr_out)
 
