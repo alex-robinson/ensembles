@@ -47,8 +47,8 @@ else ifeq ($(env),airaki) ## env=airaki
 
     ## GFORTRAN OPTIONS ##
     FC  = gfortran
-    INC_NC  = -I/opt/local/include
-    LIB_NC  = -L/opt/local/lib -lnetcdff -lnetcdf
+    INC_NC  = -I/Users/robinson/apps/netcdf/netcdf/include
+    LIB_NC  = -L/Users/robinson/apps/netcdf/netcdf/lib -lnetcdff -lnetcdf
     INC_COORD = -I/Users/robinson/models/EURICE/coordinates/.obj
 	LIB_COORD = /Users/robinson/models/EURICE/coordinates/libcoordinates.a
 
@@ -144,6 +144,13 @@ ens-mis5:  $(objdir)/nml.o $(objdir)/parameters.o $(objdir)/ncio.o \
 	$(FC) $(DFLAGS) $(FLAGS) -o ens_mis5.x $^ ens_rembo-mis5.f90 $(LFLAGS)
 	@echo " "
 	@echo "    ens_mis5.x is ready."
+	@echo " "
+
+yelmo-mismip:  $(objdir)/nml.o $(objdir)/parameters.o $(objdir)/ncio.o \
+		   $(objdir)/ensembles.o
+	$(FC) $(DFLAGS) $(FLAGS) -o yelmo-mismip.x $^ yelmo-mismip.f90 $(LFLAGS)
+	@echo " "
+	@echo "    yelmo-mismip.x is ready."
 	@echo " "
 
 grisli-mis5:  $(objdir)/nml.o $(objdir)/parameters.o $(objdir)/ncio.o \
