@@ -67,7 +67,7 @@ program ens_yelmo
 
     ! ## yelmo2D ##
     filename = "yelmo2D.nc"
-    call ens_init(ens_fldr_out,fldrs,filename,names=["time"],t=time1D,tname=tname,tunits=tunits)
+    call ens_init(ens_fldr_out,fldrs,filename,names=["xc  ","yc  ","time"],t=time1D,tname=tname,tunits=tunits)
 
     call ens_write(ens_fldr_out,fldrs,filename,"x_rf",method="linear")
     call ens_write(ens_fldr_out,fldrs,filename,"x_gl",method="linear")
