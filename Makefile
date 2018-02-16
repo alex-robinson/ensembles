@@ -47,10 +47,12 @@ else ifeq ($(env),airaki) ## env=airaki
 
     ## GFORTRAN OPTIONS ##
     FC  = gfortran
-    INC_NC  = -I/Users/robinson/apps/netcdf/netcdf/include
-    LIB_NC  = -L/Users/robinson/apps/netcdf/netcdf/lib -lnetcdff -lnetcdf
+    NC_ROOT = /opt/local
+    #NC_ROOT = /Users/robinson/apps/netcdf/netcdf
+    INC_NC  = -I$(NC_ROOT)/include
+    LIB_NC  = -L$(NC_ROOT)/lib -lnetcdff -lnetcdf
     INC_COORD = -I/Users/robinson/models/EURICE/coordinates/.obj
-	LIB_COORD = /Users/robinson/models/EURICE/coordinates/libcoordinates.a
+	  LIB_COORD = /Users/robinson/models/EURICE/coordinates/libcoordinates.a
 
     FLAGS  = -I$(objdir) -J$(objdir) $(INC_COORD) $(INC_NC) 
     LFLAGS = $(LIB_COORD) $(LIB_NC)
