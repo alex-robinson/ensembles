@@ -53,8 +53,7 @@ program ens_yelmo
     ! =============================================
     tname  = "time"
     tunits = "years"
-    call ens_times(time1D,par=[   0.d3,  14.d3,0.5d3, &
-                                 14.d3,  49.d3,0.1d3 ] )
+    call ens_times(time1D,par=[   0.d3,  49.d3,0.5d3] )
     call ens_times(time2D,times=[0.d3,15.d3,49.d3] )
 
     ! =============================================
@@ -69,8 +68,8 @@ program ens_yelmo
     filename = "yelmo2D.nc"
     call ens_init(ens_fldr_out,fldrs,filename,names=["xc  ","yc  ","time"],t=time1D,tname=tname,tunits=tunits)
 
-    call ens_write(ens_fldr_out,fldrs,filename,"x_rf",method="linear")
-    call ens_write(ens_fldr_out,fldrs,filename,"x_gl",method="linear")
+    call ens_write(ens_fldr_out,fldrs,filename,"x_rf",method="align")
+    call ens_write(ens_fldr_out,fldrs,filename,"x_gl",method="align")
     
     ! ! ## GRISLI 2D ##
     ! filename = "grisli2D.nc"
