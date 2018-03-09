@@ -237,19 +237,18 @@ contains
                     call nc_dims(path_in,name=name,names=names,dims=dims)
                     ndim  = size(dims)
 
+                    ! Get input times
+                    if (allocated(tin)) deallocate(tin)
+                    allocate(tin(dims(ndim)))
+                    call nc_read(path_in,names(ndim),tin,missing_value=mv)
+                    
+                    ! Get output times 
+                    if (allocated(tout)) deallocate(tout)
+                    allocate(tout(dims1(ndim1)))
+                    call nc_read(path_out,names1(ndim1),tout,missing_value=mv)
+                    
                     ! Check if interpolation is needed 
                     if (dims1(ndim1) .ne. dims(ndim)) then 
-
-                        ! Get input times
-                        if (allocated(tin)) deallocate(tin)
-                        allocate(tin(dims(ndim)))
-                        call nc_read(path_in,names(ndim),tin,missing_value=mv)
-
-                        ! Get output times 
-                        if (allocated(tout)) deallocate(tout)
-                        allocate(tout(dims1(ndim1)))
-                        call nc_read(path_out,names1(ndim1),tout,missing_value=mv)
-
                         txt = trim(interp_txt)
                     else 
                         txt = ""
