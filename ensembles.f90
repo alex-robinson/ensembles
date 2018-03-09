@@ -158,7 +158,7 @@ contains
         double precision, allocatable :: tin(:), tout(:)
         character(len=256) :: tname_in, tname_out 
         integer :: q, i, j, k
-
+        logical :: perform_interp 
         character(len=512) :: interp_txt, txt  
 
         ! Define output ensemble filename 
@@ -249,8 +249,10 @@ contains
                     
                     ! Check if interpolation is needed 
                     if (dims1(ndim1) .ne. dims(ndim)) then 
+                        perform_interp = .TRUE. 
                         txt = trim(interp_txt)
                     else 
+                        perform_interp = .FALSE. 
                         txt = ""
                     end if
 
@@ -266,7 +268,7 @@ contains
                     allocate(vout1D(dims1(2)))
 
                     ! Check if interpolation is needed 
-                    if (allocated(tout)) then 
+                    if (perform_interp) then 
 
                         ! Interpolate to output times
                         vout1D = ens_interp(tin,vin1D,tout,missing_value=mv,method=method)
@@ -276,15 +278,6 @@ contains
                         vout1D = vin1D
 
                     end if
-
-                    write(*,*) "input =================", q, trim(path_in)
-                    do k = 1, size(tin,1)
-                        write(*,*) tin(k), vin1D(k)
-                    end do 
-                    write(*,*) "output =================", q, trim(path_in)
-                    do k = 1, size(tout,1)
-                        write(*,*) tout(k), vout1D(k)
-                    end do 
 
                     ! Define current start and count
                     start    = 1
@@ -326,21 +319,22 @@ contains
                     call nc_dims(path_in,name=name,names=names,dims=dims)
                     ndim  = size(dims)
 
+                    ! Get input times
+                    if (allocated(tin)) deallocate(tin)
+                    allocate(tin(dims(ndim)))
+                    call nc_read(path_in,names(ndim),tin,missing_value=mv)
+                    
+                    ! Get output times 
+                    if (allocated(tout)) deallocate(tout)
+                    allocate(tout(dims1(ndim1)))
+                    call nc_read(path_out,names1(ndim1),tout,missing_value=mv)
+                    
                     ! Check if interpolation is needed 
                     if (dims1(ndim1) .ne. dims(ndim)) then 
-
-                        ! Get input times
-                        if (allocated(tin)) deallocate(tin)
-                        allocate(tin(dims(ndim)))
-                        call nc_read(path_in,names(ndim),tin,missing_value=mv)
-
-                        ! Get output times 
-                        if (allocated(tout)) deallocate(tout)
-                        allocate(tout(dims1(ndim1)))
-                        call nc_read(path_out,names1(ndim1),tout,missing_value=mv)
-
+                        perform_interp = .TRUE. 
                         txt = trim(interp_txt)
                     else 
+                        perform_interp = .FALSE. 
                         txt = ""
                     end if
 
@@ -356,7 +350,7 @@ contains
                     allocate(vout2D(dims1(2),dims1(3)))
 
                     ! Check if interpolation is needed 
-                    if (allocated(tout)) then 
+                    if (perform_interp) then 
 
                         ! Interpolate to output times
                         vout2D = ens_interp(tin,vin2D,tout,missing_value=mv,method=method)
@@ -406,21 +400,22 @@ contains
                     call nc_dims(path_in,name=name,names=names,dims=dims)
                     ndim  = size(dims)
 
+                    ! Get input times
+                    if (allocated(tin)) deallocate(tin)
+                    allocate(tin(dims(ndim)))
+                    call nc_read(path_in,names(ndim),tin,missing_value=mv)
+                    
+                    ! Get output times 
+                    if (allocated(tout)) deallocate(tout)
+                    allocate(tout(dims1(ndim1)))
+                    call nc_read(path_out,names1(ndim1),tout,missing_value=mv)
+                    
                     ! Check if interpolation is needed 
                     if (dims1(ndim1) .ne. dims(ndim)) then 
-
-                        ! Get input times
-                        if (allocated(tin)) deallocate(tin)
-                        allocate(tin(dims(ndim)))
-                        call nc_read(path_in,names(ndim),tin,missing_value=mv)
-
-                        ! Get output times 
-                        if (allocated(tout)) deallocate(tout)
-                        allocate(tout(dims1(ndim1)))
-                        call nc_read(path_out,names1(ndim1),tout,missing_value=mv)
-
+                        perform_interp = .TRUE. 
                         txt = trim(interp_txt)
                     else 
+                        perform_interp = .FALSE. 
                         txt = ""
                     end if
 
@@ -436,7 +431,7 @@ contains
                     allocate(vout3D(dims1(2),dims1(3),dims1(4)))
 
                     ! Check if interpolation is needed 
-                    if (allocated(tout)) then 
+                    if (perform_interp) then 
 
                         ! Interpolate to output times
                         vout3D = ens_interp(tin,vin3D,tout,missing_value=mv,method=method)
