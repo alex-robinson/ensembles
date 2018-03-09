@@ -278,6 +278,15 @@ contains
 
                     end if
 
+                    write(*,*) "input =================", q, trim(path_in)
+                    do k = 1, size(tin,1)
+                        write(*,*) tin(k), vin1D(k)
+                    end do 
+                    write(*,*) "output =================", q, trim(path_in)
+                    do k = 1, size(tout,1)
+                        write(*,*) tout(k), vout1D(k)
+                    end do 
+
                     ! Define current start and count
                     start    = 1
                     start(1) = q 
