@@ -174,14 +174,14 @@ contains
 
         interp_txt = " -- interp. times" 
         if (present(method)) interp_txt = trim(interp_txt)//", "//trim(method)
-
+        
         ! Determine units 
         if (present(units)) then 
             var_units = trim(units)
         else 
-            call nc_read_attr(path_in,varname=name,name="units",value=var_units)
+        !    call nc_read_attr(path_in,varname=name,name="units",value=var_units)
         end if 
-
+        
         ! Get dim names and lengths in input file
         call nc_dims(path_in,name=name,names=names,dims=dims)
         ndim  = size(dims)

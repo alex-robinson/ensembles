@@ -69,8 +69,10 @@ else ifeq ($(env),iplex) ## env=iplex
     INC_NC  = -I/home/robinson/apps/netcdf/netcdf/include
     LIB_NC  = -L/home/robinson/apps/netcdf/netcdf/lib -lnetcdf
     LIB_MKL = -L/opt/intel/mkl/lib/intel64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread
-    INC_COORD = -I/p/projects/tumble/robinson/EURICE/coord/.obj
-	LIB_COORD = /p/projects/tumble/robinson/EURICE/coord/libcoordinates.a
+
+    COORDROOT = /Users/robinson/models/EURICE/coordinates/libcoordinates
+    INC_COORD = -I${COORDROOT}/include
+    LIB_COORD = -L${COORDROOT}/include -lcoordinates
 
     FLAGS    = -module $(objdir) -L$(objdir) $(INC_COORD) $(INC_NC) 
     LFLAGS   = $(LIB_COORD) $(LIB_NC)
@@ -87,8 +89,9 @@ else ifeq ($(env),pik) ## env=pik
     INC_NC  = -I/home/robinson/apps/netcdf/netcdf/include
     LIB_NC  = -L/home/robinson/apps/netcdf/netcdf/lib -lnetcdf
     LIB_MKL = -L/opt/intel/mkl/lib/intel64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread
-    INC_COORD = -I/p/projects/tumble/robinson/EURICE/coordinates/.obj
-	  LIB_COORD = /p/projects/tumble/robinson/EURICE/coordinates/libcoordinates.a
+    COORDROOT = /home/robinson/apps/coordinates/libcoordinates
+    INC_COORD = -I${COORDROOT}/include
+    LIB_COORD = -L${COORDROOT}/include -lcoordinates
 
     FLAGS    = -module $(objdir) -L$(objdir) $(INC_COORD) $(INC_NC) 
     LFLAGS   = $(LIB_COORD) $(LIB_NC)
