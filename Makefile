@@ -51,8 +51,8 @@ else ifeq ($(env),airaki) ## env=airaki
     #NC_ROOT = /Users/robinson/apps/netcdf/netcdf
     INC_NC  = -I$(NC_ROOT)/include
     LIB_NC  = -L$(NC_ROOT)/lib -lnetcdff -lnetcdf
-    INC_COORD = -I/Users/robinson/models/EURICE/coordinates/.obj
-	  LIB_COORD = /Users/robinson/models/EURICE/coordinates/libcoordinates.a
+    INC_COORD = -I/Users/robinson/models/EURICE/coordinates/libcoordinates/include
+	  LIB_COORD = /Users/robinson/models/EURICE/coordinates/libcoordinates/include/libcoordinates.a
 
     FLAGS  = -I$(objdir) -J$(objdir) $(INC_COORD) $(INC_NC) 
     LFLAGS = $(LIB_COORD) $(LIB_NC)
