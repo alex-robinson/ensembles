@@ -53,8 +53,8 @@ program ens_yelmo
     ! =============================================
     tname  = "time"
     tunits = "years"
-    call ens_times(time1D,par=[  0.d3,150.d3,0.5d3] )
-    call ens_times(time2D,times=[0.d3,20.d3,150.d3] )
+    call ens_times(time1D,par=[  0.d3,85.d3,0.1d3] )
+    call ens_times(time2D,times=[0.d3,25.d3,85.d3] )
 
     ! =============================================
     ! 4. Write ensemble files 
